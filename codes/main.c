@@ -4,11 +4,10 @@ int main()
 {
   int X = 600, Y = 400;
   imagem desenho[X][Y];
-  imagem *ptr_desenho;
 
-  pintar_imagem(ptr_desenho, X, Y);
+  pintar_imagem(X, Y, desenho);
   printf("batata\n");
-  salvar_imagem(ptr_desenho, X, Y);
+  salvar_imagem(X, Y, desenho);
 
   return 0;
 }

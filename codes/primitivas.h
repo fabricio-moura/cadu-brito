@@ -1,6 +1,8 @@
 #ifndef PRIMITIVAS_H
 #define PRIMITIVAS_H
 
+#include <stdio.h>
+
 typedef struct
 {
     int red;
@@ -8,7 +10,7 @@ typedef struct
     int blue;
 } imagem;
 
-void pintar_imagem(imagem *desenho,int X, int Y);
-void salvar_imagem(imagem *desenho,int X, int Y);
+void pintar_imagem(int X, int Y, imagem desenho[X][Y]);
+void salvar_imagem(int X, int Y, imagem desenho[X][Y]);
 
 #endif
