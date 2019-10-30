@@ -47,7 +47,7 @@ int main()
         {
             switch(verificar_primitiva(primitiva, arquivo_input, polygon))
             {
-                case primitive_image: image(arquivo_input, pixels, desenho);
+                case primitive_image: image(arquivo_input, pixels, ptr_desenho);
                     printf("%d\n", desenho.X);
                     break;
                 case primitive_color: break;

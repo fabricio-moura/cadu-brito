@@ -62,7 +62,7 @@ enum primitivas
     primitive_open
 };
 
-void image(FILE *arquivo, pixel **pixels, imagem desenho);
+void image(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
 void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
 void color(int red, int green, int blue, cor pincel);
 //void fill(int X, int Y, cor desenho[X][Y], cor pincel);

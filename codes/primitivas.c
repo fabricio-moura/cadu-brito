@@ -1,9 +1,8 @@
 #include "primitivas.h"
 
-void image(FILE *arquivo, pixel **pixels, imagem desenho)
+void image(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
 {
-    fscanf(arquivo, " %d %d", &desenho.X, &desenho.Y);
-    printf("%d\n", desenho.X);
+    fscanf(arquivo, " %d %d", &ptr_desenho->X, &ptr_desenho->Y);
     pixels = (pixel**) realloc(pixels, 10*sizeof(pixel*));
     if(pixels == NULL)
     {

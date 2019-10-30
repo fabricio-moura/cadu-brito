@@ -56,5 +56,5 @@ int verificar_primitiva(char *primitiva, FILE *arquivo, poligono *polygon)
         return primitive_open;
     }
 
-    return 0;
+    return -1;
 }
