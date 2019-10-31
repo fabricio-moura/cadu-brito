@@ -1,25 +1,8 @@
 #include "primitivas.h"
 
-void image(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
+void image(FILE *arquivo, imagem *ptr_desenho)
 {
     fscanf(arquivo, " %d %d", &ptr_desenho->X, &ptr_desenho->Y);
-
-    pixels = (pixel**) realloc(pixels, (ptr_desenho->X)*sizeof(pixel*));
-    if(pixels == NULL)
-    {
-        printf ("Erro: Memoria Insuficiente");
-        exit(1);
-    }
-
-    for(int i = 0; i < ptr_desenho->X; i++)
-    {
-        pixels[i] = (pixel*) realloc(pixels[i], (ptr_desenho->Y)*sizeof(pixel));
-        if(pixels[i] == NULL)
-        {
-            printf("Erro: Memoria Insuficiente");
-            exit(1);
-        }
-    }
 }
 
 void color(FILE *arquivo)
@@ -31,9 +14,9 @@ void color(FILE *arquivo)
 void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
 {
     int red, green, blue;
-    // Está lendo um número aleatório da memória
+
     fscanf(arquivo, " %d %d %d\n", &red, &blue, &green);
-    printf("%d %d %d\n", red, green, blue);
+
     for(int i = 0; i < ptr_desenho->X; i++)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
@@ -87,28 +70,11 @@ void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
 {
     FILE *input_imagem;
     char nome_imagem[30];
+
     fscanf(arquivo_input, " %s", nome_imagem);
     input_imagem = fopen(nome_imagem, "r");
 
     fscanf(input_imagem, "%*s\n%d %d\n%*d\n", &(ptr_desenho->X), &(ptr_desenho->Y));
-    printf("%d %d\n", ptr_desenho->X, ptr_desenho->Y);
-
-    pixels = (pixel**) realloc(pixels, (ptr_desenho->X)*sizeof(pixel*));
-    if(pixels == NULL)
-    {
-        printf ("Erro: Memoria Insuficiente");
-        exit(1);
-    }
-
-    for(int i = 0; i < ptr_desenho->X; i++)
-    {
-        pixels[i] = (pixel*) realloc(pixels[i], (ptr_desenho->Y)*sizeof(pixel));
-        if(pixels[i] == NULL)
-        {
-            printf("Erro: Memoria Insuficiente");
-            exit(1);
-        }
-    }
 
     for(int i = 0; i < ptr_desenho->X; i++)
     {
@@ -119,7 +85,6 @@ void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
     }
 
     fclose(input_imagem);
-
 }
 
 void save(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)

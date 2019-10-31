@@ -62,7 +62,7 @@ enum primitivas
     primitive_open
 };
 
-void image(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
+void image(FILE *arquivo, imagem *ptr_desenho);
 void color(FILE *arquivo);
 void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
 void rect(FILE *arquivo);
