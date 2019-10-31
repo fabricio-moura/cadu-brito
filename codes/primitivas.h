@@ -24,7 +24,7 @@ typedef struct
     cor RGB;
 } pixel;
 
-struct color
+struct paint
 {
     cor RGB;
 } pincel;
@@ -47,7 +47,7 @@ typedef struct
 {
     int X;
     int Y;
-} poligono;
+} poligonal;
 
 enum primitivas
 {
@@ -63,9 +63,12 @@ enum primitivas
 };
 
 void image(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
+void color(FILE *arquivo);
 void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
-void color(int red, int green, int blue, cor pincel);
-//void fill(int X, int Y, cor desenho[X][Y], cor pincel);
+void rect(FILE *arquivo);
+void circle(FILE *arquivo);
+void polygon(FILE *arquivo, poligonal *poligono);
+void fill(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
 void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho);
 void save(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho);
 

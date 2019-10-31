@@ -10,9 +10,9 @@ int main()
     imagem desenho;
     imagem *ptr_desenho = &desenho;
     pixel **pixels;
-    poligono *polygon;
+    poligonal *poligono;
 
-    pixels = (pixel**) calloc(10, sizeof(pixel*));
+    pixels = (pixel**) malloc(10*sizeof(pixel*));
     if(pixels == NULL)
     {
         printf ("Erro: Memoria Insuficiente");
@@ -21,7 +21,7 @@ int main()
 
     for(int i = 0; i < 10; i++)
     {
-        pixels[i] = (pixel*) calloc(10, sizeof(pixel));
+        pixels[i] = (pixel*) malloc(10*sizeof(pixel));
         if(pixels[i] == NULL)
         {
             printf("Erro: Memoria Insuficiente");
@@ -29,8 +29,8 @@ int main()
         }
     }
 
-    polygon = (poligono*) calloc(3, sizeof(polygon));
-    if(polygon == NULL)
+    poligono = (poligonal*) malloc(3*sizeof(poligono));
+    if(poligono == NULL)
     {
         printf("Erro: Memoria Insuficiente");
         exit(1);
@@ -45,17 +45,22 @@ int main()
         }
         else
         {
-            switch(verificar_primitiva(primitiva, arquivo_input, polygon))
+            switch(verificar_primitiva(primitiva))
             {
                 case primitive_image: image(arquivo_input, pixels, ptr_desenho);
-                    printf("%d\n", desenho.X);
                     break;
-                case primitive_color: break;
-                case primitive_clear: break;
-                case primitive_rect: break;
-                case primitive_circle: break;
-                case primitive_polygon: break;
-                case primitive_fill: break;
+                case primitive_color: color(arquivo_input);
+                    break;
+                case primitive_clear: clear(arquivo_input, pixels, ptr_desenho);
+                    break;
+                case primitive_rect: rect(arquivo_input);
+                    break;
+                case primitive_circle: circle(arquivo_input);
+                    break;
+                case primitive_polygon: polygon(arquivo_input, poligono);
+                    break;
+                case primitive_fill: fill(arquivo_input, pixels, ptr_desenho);
+                    break;
                 case primitive_save: save(arquivo_input, pixels, ptr_desenho);
                     break;
                 case primitive_open: open(arquivo_input, pixels, ptr_desenho);
@@ -64,7 +69,7 @@ int main()
                     exit(1);
             }
 
-            free(polygon);
+            free(poligono);
         }
 
 

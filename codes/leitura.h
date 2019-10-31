@@ -4,6 +4,6 @@
 #include "primitivas.h"
 #include <string.h>
 
-int verificar_primitiva(char *primitiva, FILE *arquivo, poligono *polygon);
+int verificar_primitiva(char *primitiva);
 
 #endif

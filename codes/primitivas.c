@@ -3,16 +3,17 @@
 void image(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
 {
     fscanf(arquivo, " %d %d", &ptr_desenho->X, &ptr_desenho->Y);
-    pixels = (pixel**) realloc(pixels, 10*sizeof(pixel*));
+
+    pixels = (pixel**) realloc(pixels, (ptr_desenho->X)*sizeof(pixel*));
     if(pixels == NULL)
     {
         printf ("Erro: Memoria Insuficiente");
         exit(1);
     }
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < ptr_desenho->X; i++)
     {
-        pixels[i] = (pixel*) realloc(pixels[i], 10*sizeof(pixel));
+        pixels[i] = (pixel*) realloc(pixels[i], (ptr_desenho->Y)*sizeof(pixel));
         if(pixels[i] == NULL)
         {
             printf("Erro: Memoria Insuficiente");
@@ -21,42 +22,66 @@ void image(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
     }
 }
 
+void color(FILE *arquivo)
+{
+    fscanf(arquivo, " %d %d %d\n", &pincel.RGB.red, &pincel.RGB.green,
+            &pincel.RGB.blue);
+}
+
 void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
 {
     int red, green, blue;
     // Está lendo um número aleatório da memória
-    fscanf(arquivo, "%d %d %d\n", &red, &blue, &green);
+    fscanf(arquivo, " %d %d %d\n", &red, &blue, &green);
     printf("%d %d %d\n", red, green, blue);
     for(int i = 0; i < ptr_desenho->X; i++)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
         {
-            pixels[i][j].RGB.red = 100;
-            pixels[i][j].RGB.green = 100;
-            pixels[i][j].RGB.blue = 100;
+            pixels[i][j].RGB.red = red;
+            pixels[i][j].RGB.green = green;
+            pixels[i][j].RGB.blue = blue;
         }
     }
 }
 
-void color(int red, int green, int blue, cor pincel)
+void rect(FILE *arquivo)
 {
-    pincel.red = red;
-    pincel.green = green;
-    pincel.blue = blue;
+    fscanf(arquivo, " %d %d %d\n", &retangulo.X, &retangulo.Y,
+            &retangulo.tamanho);
 }
 
-/*void fill(int X, int Y, cor ptr_desenho[ptr_desenho->X][ptr_desenho->Y], cor pincel, imagem ptr_desenho)
+void circle(FILE *arquivo)
 {
+    fscanf(arquivo, " %d %d %d\n", &circulo.X, &circulo.Y, &circulo.tamanho);
+}
+
+void polygon(FILE *arquivo, poligonal *polygon)
+{
+    int pontos;
+    fscanf(arquivo, " %d", &pontos);
+    polygon = realloc(polygon, pontos * sizeof(polygon));
+    for(int i = 0; i < pontos; i++)
+    {
+        fscanf(arquivo, " %d %d", &polygon[i].X, &polygon[i].Y);
+    }
+}
+
+void fill(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
+{
+    int X, Y;
+    fscanf(arquivo, " %d %d\n", &X, &Y);
+
     for(int i = 0; i < ptr_desenho->X; i++)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
         {
-            ptr_desenho[i][j].red = pincel.red;
-            ptr_desenho[i][j].green = pincel.green;
-            ptr_desenho[i][j].blue = pincel.blue;
+            pixels[i][j].RGB.red = pincel.RGB.red;
+            pixels[i][j].RGB.green = pincel.RGB.green;
+            pixels[i][j].RGB.blue = pincel.RGB.blue;
         }
     }
-}*/
+}
 
 void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
 {
@@ -65,10 +90,10 @@ void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
     fscanf(arquivo_input, " %s", nome_imagem);
     input_imagem = fopen(nome_imagem, "r");
 
-    fscanf(input_imagem, "%*s\n%d %d\n", &(ptr_desenho->X), &(ptr_desenho->Y));
+    fscanf(input_imagem, "%*s\n%d %d\n%*d\n", &(ptr_desenho->X), &(ptr_desenho->Y));
     printf("%d %d\n", ptr_desenho->X, ptr_desenho->Y);
 
-    /*pixels = (pixel**) realloc(pixels, (ptr_desenho->X)*sizeof(pixel*));
+    pixels = (pixel**) realloc(pixels, (ptr_desenho->X)*sizeof(pixel*));
     if(pixels == NULL)
     {
         printf ("Erro: Memoria Insuficiente");
@@ -91,7 +116,7 @@ void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
         {
             fscanf(input_imagem, "%d %d %d\n", &pixels[i][j].RGB.red, &pixels[i][j].RGB.green, &pixels[i][j].RGB.blue);
         }
-    }*/
+    }
 
     fclose(input_imagem);
 
