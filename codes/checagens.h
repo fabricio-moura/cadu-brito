@@ -1,9 +1,16 @@
-#ifndef LEITURA_H
-#define LEITURA_H
+#ifndef CHECAGENS_H
+#define CHECAGENS_H
 
-#include "primitivas.h"
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "tipos.h"
+#include "primitivas.h"
 
-int verificar_primitiva(char *primitiva);
+int checar_primitiva(char *primitiva);
+void checar_formato(char *formato);
+void checar_resolucao(imagem *ptr_desenho);
+void checar_mempixel(pixel **pixels, imagem *ptr_desenho, int counter);
+void checar_fopen(FILE *arquivo);
 
 #endif

@@ -1,7 +1,6 @@
-#include <string.h>
-#include "primitivas.h"
+#include "checagens.h"
 
-int verificar_primitiva(char *primitiva)
+int checar_primitiva(char *primitiva)
 {
     if(strcmp(primitiva, "image") == 0)
     {
@@ -41,4 +40,52 @@ int verificar_primitiva(char *primitiva)
     }
 
     return -1;
+}
+
+void checar_formato(char *formato)
+{
+    if(strcmp(formato, "P3") != 0)
+    {
+        printf("Formato de arquivo inválido!\n");
+        exit(1);
+    }
+}
+
+void checar_resolucao(imagem *ptr_desenho)
+{
+    if(ptr_desenho->X < 1 || ptr_desenho->Y < 1 || ptr_desenho->X > 4000 || ptr_desenho->Y > 4000)
+    {
+        printf("%d %d\n", ptr_desenho->X, ptr_desenho->Y);
+        printf("Resolução inválida! Insira uma resolução entre 1 e 4000.\n");
+        exit(-1);
+    }
+}
+
+void checar_mempixel(pixel **pixels, imagem *ptr_desenho, int counter)
+{
+    if(counter == -1)
+    {
+        if(pixels == NULL)
+        {
+            printf ("Erro! Memória Insuficiente\n");
+            exit(1);
+        }
+    }
+    else
+    {
+        if(pixels[counter] == NULL)
+        {
+            printf("Erro! Memória Insuficiente\n");
+            exit(1);
+        }
+    }
+}
+
+void checar_fopen(FILE *arquivo)
+{
+    if(arquivo == NULL)
+    {
+        printf("Erro ao abrir arquivo!\n");
+        exit(1);
+    }
 }
