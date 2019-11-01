@@ -1,5 +1,70 @@
 #include "primitivas.h"
 
+int PA(int n)
+{
+    int soma = 1;
+    for(int i = 2; i<n;i++)
+    {
+        soma = soma + i;
+    }
+
+    return soma;
+}
+
+void octante(imagem *ptr_desenho, pixel ***ptr_pixels)
+{
+    int octante_X, octante_Y;
+    int k;
+
+    if(ptr_desenho->X % 2 != 0)
+    {
+        octante_X = (ptr_desenho->X-1)/2;
+    }
+    else
+    {
+        octante_X = (ptr_desenho->X-2)/2;
+    }
+    if(ptr_desenho->Y % 2 != 0)
+    {
+        octante_Y = (ptr_desenho->Y-1)/2;
+    }
+    else
+    {
+        octante_Y = (ptr_desenho->Y-2)/2;
+    }
+    printf("%d\n", octante_X);
+    printf("%d\n", octante_Y);
+
+    k = 0;
+    for(int i = ptr_desenho->X - octante_X+2; i <= ptr_desenho->X; i++)
+    {
+        printf("oi\n");
+        for(int j = octante_Y; j > octante_Y-k-1; j--)
+        {
+            printf("tei\n");
+            printf("%d %d", i, j);
+            (*ptr_pixels)[j][i].octante = 1;
+        }
+        k++;
+    }
+    for(int i = 0; i < octante_X-1; i++)
+    {
+        for(int j = 1+i; j < octante_Y; j++)
+        {
+            (*ptr_pixels)[j][i].octante = 4;
+        }
+    }
+
+    for(int i = 0; i < ptr_desenho->X; i++)
+    {
+        for(int j = 0; j < ptr_desenho->Y; j++)
+        {
+            printf("%d %d Octante %d\n", i, j, (*ptr_pixels)[i][j].octante);
+        }
+    }
+}
+
+
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     fscanf(arquivo, " %d %d\n", &ptr_desenho->X, &ptr_desenho->Y);
@@ -86,7 +151,6 @@ void save(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
     char nome_imagem[30];
 
     fscanf(arquivo_input, " %s", nome_imagem);
-    printf("%s\n", nome_imagem);
     arquivo_imagem = fopen(nome_imagem, "w");
     checar_fopen(arquivo_imagem);
 

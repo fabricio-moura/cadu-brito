@@ -40,6 +40,7 @@ int main()
         {
             case primitive_image:
                 image(arquivo_input, ptr_desenho, ptr_pixels);
+                octante(ptr_desenho, ptr_pixels);
 
                 break;
             case primitive_color: color(arquivo_input);

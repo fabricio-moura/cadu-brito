@@ -19,6 +19,9 @@ enum primitivas
     primitive_open
 };
 
+int PA(int n);
+
+void octante(imagem *ptr_desenho, pixel ***ptr_pixel);
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void color(FILE *arquivo);
 void clear(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho);
