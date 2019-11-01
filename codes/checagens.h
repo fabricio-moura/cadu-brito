@@ -12,5 +12,6 @@ void checar_formato(char *formato);
 void checar_resolucao(imagem *ptr_desenho);
 void checar_mempixel(pixel **pixels, imagem *ptr_desenho, int counter);
 void checar_fopen(FILE *arquivo);
+void checar_nome_input(char *nome_input);
 
 #endif

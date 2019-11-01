@@ -6,21 +6,25 @@
 
 int main()
 {
+    pixel **pixels;
+    pixel ***ptr_pixels;
     char primitiva[8];
+    char nome_input[30];
+    char *ptr_input = nome_input;
     FILE *arquivo_input;
     imagem desenho;
-    imagem *ptr_desenho;
-    pixel **pixels;
+    imagem *ptr_desenho = &desenho;
     poligonal *poligono;
 
-    ptr_desenho = &desenho;
     pixels = (pixel**) malloc(1*sizeof(pixel*));
     checar_mempixel(pixels, ptr_desenho, -1);
-
     pixels[0] = (pixel*) malloc(1*sizeof(pixel));
     checar_mempixel(pixels, ptr_desenho, 0);
 
-    arquivo_input = fopen("input.txt", "r");
+    ptr_pixels = &pixels;
+
+    checar_nome_input(ptr_input);
+    arquivo_input = fopen(nome_input, "r");
     checar_fopen(arquivo_input);
 
     while(fscanf(arquivo_input,"%s", primitiva) != EOF)
@@ -35,13 +39,14 @@ int main()
         switch(checar_primitiva(primitiva))
         {
             case primitive_image:
-                image(arquivo_input, ptr_desenho, pixels);
+                image(arquivo_input, ptr_desenho, ptr_pixels);
+
                 break;
             case primitive_color: color(arquivo_input);
                 printf("Color setada para %d %d %d\n", pincel.RGB.red, pincel.RGB.green,
                         pincel.RGB.blue);
                 break;
-            case primitive_clear: clear(arquivo_input, pixels, ptr_desenho);
+            case primitive_clear: clear(arquivo_input, ptr_pixels, ptr_desenho);
                 break;
             case primitive_rect: rect(arquivo_input);
                 printf("Retangulo X Y Tam %d %d %d\n", retangulo.X, retangulo.Y,
@@ -59,25 +64,15 @@ int main()
                 }
                 free(poligono);
                 break;
-            case primitive_fill: fill(arquivo_input, pixels, ptr_desenho);
+            case primitive_fill: fill(arquivo_input, ptr_pixels, ptr_desenho);
                 printf("Pintando tudo de %d %d %d\n", pincel.RGB.red, pincel.RGB.green,
                         pincel.RGB.blue);
                 break;
-            case primitive_save: save(arquivo_input, pixels, ptr_desenho);
+            case primitive_save:
+                save(arquivo_input, ptr_pixels, ptr_desenho);
                 break;
             case primitive_open:
-                open(arquivo_input, pixels, ptr_desenho);
-
-                /*pixels = (pixel**) realloc(pixels, (ptr_desenho->X)*sizeof(pixel*));
-                checar_mempixel(pixels, ptr_desenho, -1);
-
-                for(int i = 0; i < ptr_desenho->X; i++)
-                {
-                    pixels[i] = (pixel*) realloc(pixels[i], (ptr_desenho->Y)*sizeof(pixel));
-                    checar_mempixel(pixels, ptr_desenho, i);
-                }*/
-
-                //exit(1);
+                open(arquivo_input, ptr_pixels, ptr_desenho);
                 break;
             default: printf("Primitiva inválida\n");
                 exit(1);

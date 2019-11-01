@@ -19,14 +19,14 @@ enum primitivas
     primitive_open
 };
 
-void image(FILE *arquivo, imagem *ptr_desenho, pixel **pixels);
+void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void color(FILE *arquivo);
-void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
+void clear(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho);
 void rect(FILE *arquivo);
 void circle(FILE *arquivo);
 void polygon(FILE *arquivo, poligonal *poligono);
-void fill(FILE *arquivo, pixel **pixels, imagem *ptr_desenho);
-void save(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho);
-void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho);
+void fill(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho);
+void save(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho);
+void open(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho);
 
 #endif

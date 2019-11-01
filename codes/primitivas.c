@@ -1,20 +1,21 @@
 #include "primitivas.h"
 
-void image(FILE *arquivo, imagem *ptr_desenho, pixel **pixels)
+void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
-    fscanf(arquivo, " %d %d", &ptr_desenho->X, &ptr_desenho->Y);
-    printf("%d %d\n", ptr_desenho->X, ptr_desenho->Y);
-    //checar_resolucao(ptr_desenho);
-    pixels = (pixel**) realloc(pixels, (ptr_desenho->X)*sizeof(pixel*));
-    checar_mempixel(pixels, ptr_desenho, -1);
+    fscanf(arquivo, " %d %d\n", &ptr_desenho->X, &ptr_desenho->Y);
+    checar_resolucao(ptr_desenho);
 
+    *ptr_pixels = (pixel**) realloc(*ptr_pixels,
+                    (ptr_desenho->X)*sizeof(pixel*));
+
+    checar_mempixel(*ptr_pixels, ptr_desenho, -1);
     for(int i = 0; i < ptr_desenho->X; i++)
     {
-        printf("%d\n",i);
-        pixels[i] = (pixel*) malloc((ptr_desenho->Y)*sizeof(pixel));
-        checar_mempixel(pixels, ptr_desenho, i);
+        (*ptr_pixels)[i] = (pixel*) realloc((*ptr_pixels)[i],
+                            (ptr_desenho->Y)*sizeof(pixel));
+
+        checar_mempixel(*ptr_pixels, ptr_desenho, i);
     }
-    printf("Desenho X Y %d %d\n", ptr_desenho->X, ptr_desenho->Y);
 }
 
 void color(FILE *arquivo)
@@ -23,7 +24,7 @@ void color(FILE *arquivo)
             &pincel.RGB.blue);
 }
 
-void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
+void clear(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
 {
     int red, green, blue;
 
@@ -33,9 +34,9 @@ void clear(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
         {
-            pixels[i][j].RGB.red = red;
-            pixels[i][j].RGB.green = green;
-            pixels[i][j].RGB.blue = blue;
+            (*ptr_pixels)[i][j].RGB.red = red;
+            (*ptr_pixels)[i][j].RGB.green = green;
+            (*ptr_pixels)[i][j].RGB.blue = blue;
         }
     }
 }
@@ -63,7 +64,7 @@ void polygon(FILE *arquivo, poligonal *poligono)
     }
 }
 
-void fill(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
+void fill(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
 {
     int X, Y;
     fscanf(arquivo, " %d %d\n", &X, &Y);
@@ -72,19 +73,20 @@ void fill(FILE *arquivo, pixel **pixels, imagem *ptr_desenho)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
         {
-            pixels[i][j].RGB.red = pincel.RGB.red;
-            pixels[i][j].RGB.green = pincel.RGB.green;
-            pixels[i][j].RGB.blue = pincel.RGB.blue;
+            (*ptr_pixels)[i][j].RGB.red = pincel.RGB.red;
+            (*ptr_pixels)[i][j].RGB.green = pincel.RGB.green;
+            (*ptr_pixels)[i][j].RGB.blue = pincel.RGB.blue;
         }
     }
 }
 
-void save(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
+void save(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
 {
     FILE *arquivo_imagem;
     char nome_imagem[30];
 
     fscanf(arquivo_input, " %s", nome_imagem);
+    printf("%s\n", nome_imagem);
     arquivo_imagem = fopen(nome_imagem, "w");
     checar_fopen(arquivo_imagem);
 
@@ -98,14 +100,17 @@ void save(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
         {
-            fprintf(arquivo_imagem, "%d %d %d\n", pixels[i][j].RGB.red, pixels[i][j].RGB.green, pixels[i][j].RGB.blue);
+            fprintf(arquivo_imagem, "%d %d %d\n",
+                    (*ptr_pixels)[i][j].RGB.red,
+                    (*ptr_pixels)[i][j].RGB.green,
+                    (*ptr_pixels)[i][j].RGB.blue);
         }
     }
 
     fclose(arquivo_imagem);
 }
 
-void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
+void open(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
 {
     FILE *input_imagem;
     char nome_imagem[30];
@@ -114,21 +119,35 @@ void open(FILE *arquivo_input, pixel **pixels, imagem *ptr_desenho)
 
     fscanf(arquivo_input, "%s", nome_imagem);
     input_imagem = fopen(nome_imagem, "r");
-
     checar_fopen(input_imagem);
 
-    fscanf(input_imagem, "%s\n%d %d\n%d", formato, &ptr_desenho->X, &ptr_desenho->Y, &qualidade);
+    fscanf(input_imagem, "%s\n%d %d\n%d", formato, &ptr_desenho->X,
+            &ptr_desenho->Y, &qualidade);
     checar_formato(formato);
     checar_resolucao(ptr_desenho);
-    if(qualidade != 255) printf("Qualidade inválida. Abra um arquivo com qualidade 255.\n");
+    if(qualidade != 255)
+        printf("Qualidade inválida. Abra um arquivo com qualidade 255.\n");
 
-    /*for(int i = 0; i < ptr_desenho->X; i++)
+    *ptr_pixels = (pixel**) realloc(*ptr_pixels,
+                                    (ptr_desenho->X)*sizeof(pixel*));
+    checar_mempixel(*ptr_pixels, ptr_desenho, -1);
+    for(int i = 0; i < ptr_desenho->X; i++)
+    {
+        (*ptr_pixels)[i] = (pixel*) realloc((*ptr_pixels)[i],
+                                            (ptr_desenho->Y)*sizeof(pixel));
+        checar_mempixel(*ptr_pixels, ptr_desenho, i);
+    }
+
+    for(int i = 0; i < ptr_desenho->X; i++)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
         {
-            fscanf(input_imagem, "%d %d %d", &pixels[i][j].RGB.red, &pixels[i][j].RGB.green, &pixels[i][j].RGB.blue);
+            fscanf(input_imagem, "%d %d %d",
+                    &(*ptr_pixels)[i][j].RGB.red,
+                    &(*ptr_pixels)[i][j].RGB.green,
+                    &(*ptr_pixels)[i][j].RGB.blue);
         }
-    }*/
+    }
 
     fclose(input_imagem);
 }

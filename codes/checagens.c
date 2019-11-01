@@ -53,7 +53,8 @@ void checar_formato(char *formato)
 
 void checar_resolucao(imagem *ptr_desenho)
 {
-    if(ptr_desenho->X < 1 || ptr_desenho->Y < 1 || ptr_desenho->X > 4000 || ptr_desenho->Y > 4000)
+    if(ptr_desenho->X < 1 || ptr_desenho->Y < 1 ||
+        ptr_desenho->X > 4000 || ptr_desenho->Y > 4000)
     {
         printf("%d %d\n", ptr_desenho->X, ptr_desenho->Y);
         printf("Resolução inválida! Insira uma resolução entre 1 e 4000.\n");
@@ -88,4 +89,16 @@ void checar_fopen(FILE *arquivo)
         printf("Erro ao abrir arquivo!\n");
         exit(1);
     }
+}
+
+void checar_nome_input(char *ptr_input)
+{
+
+    printf("Insira o nome do arquivo txt ou 0 para default: ");
+    scanf("%s", ptr_input);
+    if(strcmp(ptr_input, "0") == 0)
+    {
+        strcpy(ptr_input, "input.txt");
+    }
+
 }
