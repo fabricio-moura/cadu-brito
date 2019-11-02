@@ -1,6 +1,6 @@
 #include "primitivas.h"
 
-int PA(int n)
+/*int PA(int n)
 {
     int soma = 1;
     for(int i = 2; i<n;i++)
@@ -62,8 +62,54 @@ void octante(imagem *ptr_desenho, pixel ***ptr_pixels)
             printf("%d %d Octante %d\n", i, j, (*ptr_pixels)[i][j].octante);
         }
     }
-}
+}*/
+void reta(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels)
+{
+    float inclinacao;
+    float acumulado;
+    inclinacao = (float)(y_final - y_inicial)/(x_final - x_inicial);
+    inclinacao = abs(inclinacao);
 
+    while(x_inicial <= x_final || y_inicial <= y_final || x_inicial >= x_final || y_inicial >= y_final )
+    {
+        printf("X %d Y %d\n", x_inicial, y_inicial);
+        acumulado = inclinacao;
+        while(acumulado <= 1)
+        {
+            printf("inclinação %f\n", inclinacao);
+            (*ptr_pixels)[x_inicial][y_inicial].RGB.red = pincel.RGB.red;
+            (*ptr_pixels)[x_inicial][y_inicial].RGB.green = pincel.RGB.green;
+            (*ptr_pixels)[x_inicial][y_inicial].RGB.blue = pincel.RGB.blue;
+            if(x_inicial < x_final)
+            {
+                x_inicial++;
+            }
+            else if(x_inicial > x_final)
+            {
+                x_inicial--;
+            }
+            else
+            {
+                break;
+            }
+            acumulado += inclinacao;
+            printf("Acumulado %f\n", acumulado);
+        }
+        if(y_inicial < y_final)
+        {
+            y_inicial++;
+        }
+        else if(y_inicial > y_final)
+        {
+            y_inicial--;
+        }
+        else
+        {
+            break;
+        }
+            printf("X %d Y %d b\n", x_inicial, y_inicial);
+    }
+}
 
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
@@ -106,10 +152,11 @@ void clear(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
     }
 }
 
-void rect(FILE *arquivo)
+void rect(FILE *arquivo, pixel ***ptr_pixels)
 {
     fscanf(arquivo, " %d %d %d\n", &retangulo.X, &retangulo.Y,
             &retangulo.tamanho);
+    reta(100,120,420,76, ptr_pixels);
 }
 
 void circle(FILE *arquivo)
@@ -210,6 +257,9 @@ void open(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
                     &(*ptr_pixels)[i][j].RGB.red,
                     &(*ptr_pixels)[i][j].RGB.green,
                     &(*ptr_pixels)[i][j].RGB.blue);
+            printf("%d %d %d %d %d\n", i, j, (*ptr_pixels)[i][j].RGB.red,
+            (*ptr_pixels)[i][j].RGB.green,
+            (*ptr_pixels)[i][j].RGB.blue);
         }
     }
 

@@ -40,7 +40,7 @@ int main()
         {
             case primitive_image:
                 image(arquivo_input, ptr_desenho, ptr_pixels);
-                octante(ptr_desenho, ptr_pixels);
+                //octante(ptr_desenho, ptr_pixels);
 
                 break;
             case primitive_color: color(arquivo_input);
@@ -49,7 +49,7 @@ int main()
                 break;
             case primitive_clear: clear(arquivo_input, ptr_pixels, ptr_desenho);
                 break;
-            case primitive_rect: rect(arquivo_input);
+            case primitive_rect: rect(arquivo_input, ptr_pixels);
                 printf("Retangulo X Y Tam %d %d %d\n", retangulo.X, retangulo.Y,
                         retangulo.tamanho);
                 break;
