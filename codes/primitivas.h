@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "tipos.h"
 #include "checagens.h"
 
@@ -22,6 +23,7 @@ enum primitivas
 /*int PA(int n);
 
 void octante(imagem *ptr_desenho, pixel ***ptr_pixel);*/
+void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels);
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void color(FILE *arquivo);
 void clear(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho);

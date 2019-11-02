@@ -63,17 +63,29 @@ void octante(imagem *ptr_desenho, pixel ***ptr_pixels)
         }
     }
 }*/
-void reta(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels)
+void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels)
 {
     float inclinacao;
     float acumulado;
-    inclinacao = (float)(y_final - y_inicial)/(x_final - x_inicial);
-    inclinacao = abs(inclinacao);
+    if(y_final - y_inicial == 0)
+    {
+        inclinacao = 1;
+    }
+    else if(x_final - x_inicial == 0)
+    {
+        inclinacao = 1;
+    }
+    else
+    {
+        inclinacao = (float)(y_final - y_inicial)/(x_final - x_inicial);
+    }
+    inclinacao = fabs(inclinacao);
 
     while(x_inicial <= x_final || y_inicial <= y_final || x_inicial >= x_final || y_inicial >= y_final )
     {
         printf("X %d Y %d\n", x_inicial, y_inicial);
         acumulado = inclinacao;
+        printf("inclinação %f\n", inclinacao);
         while(acumulado <= 1)
         {
             printf("inclinação %f\n", inclinacao);
@@ -103,10 +115,11 @@ void reta(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_p
         {
             y_inicial--;
         }
-        else
+        if(x_inicial == x_final && y_inicial == y_final)
         {
             break;
         }
+
             printf("X %d Y %d b\n", x_inicial, y_inicial);
     }
 }
@@ -156,7 +169,7 @@ void rect(FILE *arquivo, pixel ***ptr_pixels)
 {
     fscanf(arquivo, " %d %d %d\n", &retangulo.X, &retangulo.Y,
             &retangulo.tamanho);
-    reta(100,120,420,76, ptr_pixels);
+    reta(120,100,80,100, ptr_pixels);
 }
 
 void circle(FILE *arquivo)
