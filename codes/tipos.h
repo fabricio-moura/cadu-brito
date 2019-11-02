@@ -19,7 +19,6 @@ typedef struct
     int X;
     int Y;
     cor RGB;
-    int octante;
 } pixel;
 
 struct paint

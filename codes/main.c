@@ -53,7 +53,7 @@ int main()
                 printf("Retangulo X Y Tam %d %d %d\n", retangulo.X, retangulo.Y,
                         retangulo.tamanho);
                 break;
-            case primitive_circle: circle(arquivo_input);
+            case primitive_circle: circle(arquivo_input, ptr_pixels);
                 printf("Circulo X Y Tam %d %d %d\n", circulo.X, circulo.Y, circulo.tamanho);
                 break;
             case primitive_polygon:

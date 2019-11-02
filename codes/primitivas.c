@@ -63,6 +63,20 @@ void octante(imagem *ptr_desenho, pixel ***ptr_pixels)
         }
     }
 }*/
+void paint_pixels(int eixo_x, int eixo_y, pixel ***ptr_pixels)
+{
+    (*ptr_pixels)[eixo_x][eixo_y].RGB.red = pincel.RGB.red;
+    (*ptr_pixels)[eixo_x][eixo_y].RGB.green = pincel.RGB.green;
+    (*ptr_pixels)[eixo_x][eixo_y].RGB.blue = pincel.RGB.blue;
+}
+
+/*void line_circle(int x_centro, int y_centro, int tamanho, pixel ***ptr_pixels)
+{
+
+
+
+}*/
+
 void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels)
 {
     float inclinacao;
@@ -83,12 +97,12 @@ void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_p
 
     while(x_inicial <= x_final || y_inicial <= y_final || x_inicial >= x_final || y_inicial >= y_final )
     {
-        printf("X %d Y %d\n", x_inicial, y_inicial);
+        //printf("X %d Y %d\n", x_inicial, y_inicial);
         acumulado = inclinacao;
-        printf("inclinação %f\n", inclinacao);
+        //printf("inclinação %f\n", inclinacao);
         while(acumulado <= 1)
         {
-            printf("inclinação %f\n", inclinacao);
+            //printf("inclinação %f\n", inclinacao);
             (*ptr_pixels)[x_inicial][y_inicial].RGB.red = pincel.RGB.red;
             (*ptr_pixels)[x_inicial][y_inicial].RGB.green = pincel.RGB.green;
             (*ptr_pixels)[x_inicial][y_inicial].RGB.blue = pincel.RGB.blue;
@@ -105,7 +119,7 @@ void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_p
                 break;
             }
             acumulado += inclinacao;
-            printf("Acumulado %f\n", acumulado);
+            //printf("Acumulado %f\n", acumulado);
         }
         if(y_inicial < y_final)
         {
@@ -120,7 +134,7 @@ void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_p
             break;
         }
 
-            printf("X %d Y %d b\n", x_inicial, y_inicial);
+            //printf("X %d Y %d b\n", x_inicial, y_inicial);
     }
 }
 
@@ -169,12 +183,40 @@ void rect(FILE *arquivo, pixel ***ptr_pixels)
 {
     fscanf(arquivo, " %d %d %d\n", &retangulo.X, &retangulo.Y,
             &retangulo.tamanho);
-    reta(120,100,80,100, ptr_pixels);
+    line(0,0,499,499, ptr_pixels);
 }
 
-void circle(FILE *arquivo)
+// Algoritmo de Bresenham copiado.
+void circle(FILE *arquivo, pixel ***ptr_pixels)
 {
     fscanf(arquivo, " %d %d %d\n", &circulo.X, &circulo.Y, &circulo.tamanho);
+
+    int decisao = 3 - (2*circulo.tamanho);
+    int y = circulo.tamanho;
+    int x = 0;
+
+    while (y >= x)
+    {
+        paint_pixels(circulo.X+x, circulo.Y+y, ptr_pixels);
+        paint_pixels(circulo.X+x, circulo.Y-y, ptr_pixels);
+        paint_pixels(circulo.X-x, circulo.Y+y, ptr_pixels);
+        paint_pixels(circulo.X-x, circulo.Y-y, ptr_pixels);
+        paint_pixels(circulo.X+y, circulo.Y+x, ptr_pixels);
+        paint_pixels(circulo.X+y, circulo.Y-x, ptr_pixels);
+        paint_pixels(circulo.X-y, circulo.Y+x, ptr_pixels);
+        paint_pixels(circulo.X-y, circulo.Y-x, ptr_pixels);
+
+        if (decisao > 0)
+        {
+            decisao = decisao + 4 * (x - y) + 10;
+            y--;
+        }
+        else
+        {
+            decisao = decisao + 4 * x + 6;
+        }
+        x++;
+    }
 }
 
 void polygon(FILE *arquivo, poligonal *poligono)
@@ -193,15 +235,32 @@ void fill(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
 {
     int X, Y;
     fscanf(arquivo, " %d %d\n", &X, &Y);
-
-    for(int i = 0; i < ptr_desenho->X; i++)
+    pixel *cancer = malloc(1*sizeof(pixel));
+    int progressao = 4;
+    int tamanho = 1;
+    cancer[0].X = X;
+    cancer[0].Y = Y;
+    while(1)
     {
-        for(int j = 0; j < ptr_desenho->Y; j++)
+        tamanho += progressao;
+        cancer = realloc(cancer, tamanho* sizeof(pixel));
+        for(int i = tamanho-progressao; i < tamanho; i++)
         {
-            (*ptr_pixels)[i][j].RGB.red = pincel.RGB.red;
-            (*ptr_pixels)[i][j].RGB.green = pincel.RGB.green;
-            (*ptr_pixels)[i][j].RGB.blue = pincel.RGB.blue;
+            cancer[i].X = cancer[0].X;
+            cancer[i].Y = cancer[0].Y+1;
+
         }
+        progressao += 4;
+        incremento_eixos++;
+        incremento_diagonais++;
+        if(tamanho > 20) break;
+
+    }
+    for(int i = 0; i < tamanho; i++)
+    {
+        (*ptr_pixels)[cancer[i].X][cancer[i].Y].RGB.red = pincel.RGB.red;
+        (*ptr_pixels)[cancer[i].X][cancer[i].Y].RGB.green = pincel.RGB.green;
+        (*ptr_pixels)[cancer[i].X][cancer[i].Y].RGB.blue = pincel.RGB.blue;
     }
 }
 
