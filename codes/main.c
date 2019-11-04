@@ -17,9 +17,9 @@ int main()
     poligonal *poligono;
 
     pixels = (pixel**) malloc(1*sizeof(pixel*));
-    checar_mempixel(pixels, ptr_desenho, -1);
+    checar_mempixel(pixels, -1);
     pixels[0] = (pixel*) malloc(1*sizeof(pixel));
-    checar_mempixel(pixels, ptr_desenho, 0);
+    checar_mempixel(pixels, 0);
 
     ptr_pixels = &pixels;
 

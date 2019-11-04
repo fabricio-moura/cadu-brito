@@ -62,7 +62,7 @@ void checar_resolucao(imagem *ptr_desenho)
     }
 }
 
-void checar_mempixel(pixel **pixels, imagem *ptr_desenho, int counter)
+void checar_mempixel(pixel **pixels, int counter)
 {
     if(counter == -1)
     {
@@ -93,12 +93,19 @@ void checar_fopen(FILE *arquivo)
 
 void checar_nome_input(char *ptr_input)
 {
-
     printf("Insira o nome do arquivo txt ou 0 para default: ");
     scanf("%s", ptr_input);
     if(strcmp(ptr_input, "0") == 0)
     {
         strcpy(ptr_input, "input.txt");
     }
+}
 
+void checar_coordenadas(int X, int Y, imagem *ptr_desenho, char *comando)
+{
+    if(X < 0 || Y < 0 || X > ptr_desenho->X-1 || Y > ptr_desenho->Y-1)
+    {
+        printf("Posição de coordenada do comando %s inválida.\n", comando);
+        exit(1);
+    }
 }

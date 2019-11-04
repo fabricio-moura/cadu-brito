@@ -24,7 +24,7 @@ typedef struct
 struct paint
 {
     cor RGB;
-} pincel;
+} pincel, pincel_fill;
 
 struct rect
 {

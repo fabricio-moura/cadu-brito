@@ -146,13 +146,13 @@ void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     *ptr_pixels = (pixel**) realloc(*ptr_pixels,
                     (ptr_desenho->X)*sizeof(pixel*));
 
-    checar_mempixel(*ptr_pixels, ptr_desenho, -1);
+    checar_mempixel(*ptr_pixels, -1);
     for(int i = 0; i < ptr_desenho->X; i++)
     {
         (*ptr_pixels)[i] = (pixel*) realloc((*ptr_pixels)[i],
                             (ptr_desenho->Y)*sizeof(pixel));
 
-        checar_mempixel(*ptr_pixels, ptr_desenho, i);
+        checar_mempixel(*ptr_pixels, i);
     }
 }
 
@@ -231,37 +231,61 @@ void polygon(FILE *arquivo, poligonal *poligono)
     }
 }
 
+void fill_spread(int X, int Y, pixel ***ptr_pixels, imagem *ptr_desenho)
+{
+    paint_pixels(X, Y, pixels);
+
+    if(Y+1 < ptr_desenho->Y &&
+        (*ptr_pixels)[X][Y+1].RGB.red == pincel_fill.RGB.red &&
+        (*ptr_pixels)[X][Y+1].RGB.green == pincel_fill.RGB.green &&
+        (*ptr_pixels)[X][Y+1].RGB.blue == pincel_fill.RGB.blue)
+    {
+        fill_spread(X, Y+1, ptr_pixels, ptr_desenho);
+    }
+
+    if(Y-1 >=0 && (*ptr_pixels)[X][Y-1].RGB.red == pincel_fill.RGB.red &&
+        (*ptr_pixels)[X][Y-1].RGB.green == pincel_fill.RGB.green &&
+        (*ptr_pixels)[X][Y-1].RGB.blue == pincel_fill.RGB.blue)
+    {
+        (*ptr_pixels)[X][Y].RGB.red = pincel.RGB.red;
+        (*ptr_pixels)[X][Y].RGB.green = pincel.RGB.blue;
+        (*ptr_pixels)[X][Y].RGB.blue = pincel.RGB.green;
+        fill_spread(X, Y-1, ptr_pixels, ptr_desenho);
+    }
+
+    if(X+1 < ptr_desenho->X &&
+        (*ptr_pixels)[X+1][Y].RGB.red == pincel_fill.RGB.red &&
+        (*ptr_pixels)[X+1][Y].RGB.green == pincel_fill.RGB.green &&
+        (*ptr_pixels)[X+1][Y].RGB.blue == pincel_fill.RGB.blue)
+    {
+        (*ptr_pixels)[X][Y].RGB.red = pincel.RGB.red;
+        (*ptr_pixels)[X][Y].RGB.green = pincel.RGB.blue;
+        (*ptr_pixels)[X][Y].RGB.blue = pincel.RGB.green;
+        fill_spread(X+1, Y, ptr_pixels, ptr_desenho);
+    }
+    if(X-1 >= 0 && (*ptr_pixels)[X-1][Y].RGB.red == pincel_fill.RGB.red &&
+        (*ptr_pixels)[X-1][Y].RGB.green == pincel_fill.RGB.green &&
+        (*ptr_pixels)[X-1][Y].RGB.blue == pincel_fill.RGB.blue)
+    {
+        (*ptr_pixels)[X][Y].RGB.red = pincel.RGB.red;
+        (*ptr_pixels)[X][Y].RGB.green = pincel.RGB.blue;
+        (*ptr_pixels)[X][Y].RGB.blue = pincel.RGB.green;
+        fill_spread(X-1, Y, ptr_pixels, ptr_desenho);
+    }
+}
+
 void fill(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
 {
     int X, Y;
+
     fscanf(arquivo, " %d %d\n", &X, &Y);
-    pixel *cancer = malloc(1*sizeof(pixel));
-    int progressao = 4;
-    int tamanho = 1;
-    cancer[0].X = X;
-    cancer[0].Y = Y;
-    while(1)
-    {
-        tamanho += progressao;
-        cancer = realloc(cancer, tamanho* sizeof(pixel));
-        for(int i = tamanho-progressao; i < tamanho; i++)
-        {
-            cancer[i].X = cancer[0].X;
-            cancer[i].Y = cancer[0].Y+1;
+    checar_coordenadas(X, Y, ptr_desenho, "fill");
 
-        }
-        progressao += 4;
-        incremento_eixos++;
-        incremento_diagonais++;
-        if(tamanho > 20) break;
+    pincel_fill.RGB.red = (*ptr_pixels)[X][Y].RGB.red;
+    pincel_fill.RGB.green = (*ptr_pixels)[X][Y].RGB.green;
+    pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 
-    }
-    for(int i = 0; i < tamanho; i++)
-    {
-        (*ptr_pixels)[cancer[i].X][cancer[i].Y].RGB.red = pincel.RGB.red;
-        (*ptr_pixels)[cancer[i].X][cancer[i].Y].RGB.green = pincel.RGB.green;
-        (*ptr_pixels)[cancer[i].X][cancer[i].Y].RGB.blue = pincel.RGB.blue;
-    }
+    fill_spread(X, Y, ptr_pixels, ptr_desenho);
 }
 
 void save(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
@@ -313,12 +337,12 @@ void open(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
 
     *ptr_pixels = (pixel**) realloc(*ptr_pixels,
                                     (ptr_desenho->X)*sizeof(pixel*));
-    checar_mempixel(*ptr_pixels, ptr_desenho, -1);
+    checar_mempixel(*ptr_pixels, -1);
     for(int i = 0; i < ptr_desenho->X; i++)
     {
         (*ptr_pixels)[i] = (pixel*) realloc((*ptr_pixels)[i],
                                             (ptr_desenho->Y)*sizeof(pixel));
-        checar_mempixel(*ptr_pixels, ptr_desenho, i);
+        checar_mempixel(*ptr_pixels, i);
     }
 
     for(int i = 0; i < ptr_desenho->X; i++)
