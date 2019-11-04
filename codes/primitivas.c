@@ -186,16 +186,9 @@ void rect(FILE *arquivo, pixel ***ptr_pixels)
     line(0,0,499,499, ptr_pixels);
 }
 
-// Algoritmo de Bresenham copiado.
-void circle(FILE *arquivo, pixel ***ptr_pixels)
+void circle_line(int x, int y, int decisao, pixel ***ptr_pixels)
 {
-    fscanf(arquivo, " %d %d %d\n", &circulo.X, &circulo.Y, &circulo.tamanho);
-
-    int decisao = 3 - (2*circulo.tamanho);
-    int y = circulo.tamanho;
-    int x = 0;
-
-    while (y >= x)
+    if(y >= x)
     {
         paint_pixels(circulo.X+x, circulo.Y+y, ptr_pixels);
         paint_pixels(circulo.X+x, circulo.Y-y, ptr_pixels);
@@ -206,7 +199,7 @@ void circle(FILE *arquivo, pixel ***ptr_pixels)
         paint_pixels(circulo.X-y, circulo.Y+x, ptr_pixels);
         paint_pixels(circulo.X-y, circulo.Y-x, ptr_pixels);
 
-        if (decisao > 0)
+        if(decisao > 0)
         {
             decisao = decisao + 4 * (x - y) + 10;
             y--;
@@ -216,7 +209,16 @@ void circle(FILE *arquivo, pixel ***ptr_pixels)
             decisao = decisao + 4 * x + 6;
         }
         x++;
+        circle_line(x, y, decisao, ptr_pixels);
     }
+}
+
+// Algoritmo de Bresenham copiado.
+void circle(FILE *arquivo, pixel ***ptr_pixels)
+{
+    fscanf(arquivo, " %d %d %d\n", &circulo.X, &circulo.Y, &circulo.tamanho);
+
+    circle_line(0, circulo.tamanho, 3-(2*circulo.tamanho), ptr_pixels);
 }
 
 void polygon(FILE *arquivo, poligonal *poligono)
@@ -233,7 +235,7 @@ void polygon(FILE *arquivo, poligonal *poligono)
 
 void fill_spread(int X, int Y, pixel ***ptr_pixels, imagem *ptr_desenho)
 {
-    paint_pixels(X, Y, pixels);
+    paint_pixels(X, Y, ptr_pixels);
 
     if(Y+1 < ptr_desenho->Y &&
         (*ptr_pixels)[X][Y+1].RGB.red == pincel_fill.RGB.red &&
