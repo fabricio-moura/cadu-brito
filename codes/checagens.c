@@ -82,6 +82,15 @@ void checar_mempixel(pixel **pixels, int counter)
     }
 }
 
+void checar_mempoligono(poligonal *poligono)
+{
+    if(poligono == NULL)
+    {
+        printf ("Erro! Memória Insuficiente\n");
+        exit(1);
+    }
+}
+
 void checar_fopen(FILE *arquivo)
 {
     if(arquivo == NULL)
@@ -108,4 +117,19 @@ void checar_coordenadas(int X, int Y, imagem *ptr_desenho, char *comando)
         printf("Posição de coordenada do comando %s inválida.\n", comando);
         exit(1);
     }
+}
+
+int checar_proxpixel(int X, int Y, pixel ***ptr_pixels)
+{
+    if((*ptr_pixels)[X][Y].RGB.red == pincel_fill.RGB.red
+        && (*ptr_pixels)[X][Y].RGB.green == pincel_fill.RGB.green
+        && (*ptr_pixels)[X][Y].RGB.blue == pincel_fill.RGB.blue
+        && ((*ptr_pixels)[X][Y].RGB.red != pincel.RGB.red
+        || (*ptr_pixels)[X][Y].RGB.green != pincel.RGB.green
+        || (*ptr_pixels)[X][Y].RGB.blue != pincel.RGB.blue))
+    {
+        return 1;
+    }
+
+    return 0;
 }

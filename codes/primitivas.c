@@ -1,68 +1,5 @@
 #include "primitivas.h"
 
-/*int PA(int n)
-{
-    int soma = 1;
-    for(int i = 2; i<n;i++)
-    {
-        soma = soma + i;
-    }
-
-    return soma;
-}
-
-void octante(imagem *ptr_desenho, pixel ***ptr_pixels)
-{
-    int octante_X, octante_Y;
-    int k;
-
-    if(ptr_desenho->X % 2 != 0)
-    {
-        octante_X = (ptr_desenho->X-1)/2;
-    }
-    else
-    {
-        octante_X = (ptr_desenho->X-2)/2;
-    }
-    if(ptr_desenho->Y % 2 != 0)
-    {
-        octante_Y = (ptr_desenho->Y-1)/2;
-    }
-    else
-    {
-        octante_Y = (ptr_desenho->Y-2)/2;
-    }
-    printf("%d\n", octante_X);
-    printf("%d\n", octante_Y);
-
-    k = 0;
-    for(int i = ptr_desenho->X - octante_X+2; i <= ptr_desenho->X; i++)
-    {
-        printf("oi\n");
-        for(int j = octante_Y; j > octante_Y-k-1; j--)
-        {
-            printf("tei\n");
-            printf("%d %d", i, j);
-            (*ptr_pixels)[j][i].octante = 1;
-        }
-        k++;
-    }
-    for(int i = 0; i < octante_X-1; i++)
-    {
-        for(int j = 1+i; j < octante_Y; j++)
-        {
-            (*ptr_pixels)[j][i].octante = 4;
-        }
-    }
-
-    for(int i = 0; i < ptr_desenho->X; i++)
-    {
-        for(int j = 0; j < ptr_desenho->Y; j++)
-        {
-            printf("%d %d Octante %d\n", i, j, (*ptr_pixels)[i][j].octante);
-        }
-    }
-}*/
 void paint_pixels(int eixo_x, int eixo_y, pixel ***ptr_pixels)
 {
     (*ptr_pixels)[eixo_x][eixo_y].RGB.red = pincel.RGB.red;
@@ -70,14 +7,12 @@ void paint_pixels(int eixo_x, int eixo_y, pixel ***ptr_pixels)
     (*ptr_pixels)[eixo_x][eixo_y].RGB.blue = pincel.RGB.blue;
 }
 
-/*void line_circle(int x_centro, int y_centro, int tamanho, pixel ***ptr_pixels)
-{
-
-
-
-}*/
-
-void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels)
+void line(
+    int x_final,
+    int y_final,
+    int x_inicial,
+    int y_inicial,
+    pixel ***ptr_pixels)
 {
     float inclinacao;
     float acumulado;
@@ -91,21 +26,23 @@ void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_p
     }
     else
     {
-        inclinacao = (float)(y_final - y_inicial)/(x_final - x_inicial);
+        inclinacao = (float) (y_final - y_inicial)/(x_final - x_inicial);
     }
     inclinacao = fabs(inclinacao);
 
-    while(x_inicial <= x_final || y_inicial <= y_final || x_inicial >= x_final || y_inicial >= y_final )
+    while(
+        x_inicial <= x_final
+        || y_inicial <= y_final
+        || x_inicial >= x_final
+        || y_inicial >= y_final)
     {
-        //printf("X %d Y %d\n", x_inicial, y_inicial);
+        printf("X %d Y %d\n", x_inicial, y_inicial);
         acumulado = inclinacao;
-        //printf("inclinação %f\n", inclinacao);
+        printf("inclinação %f\n", inclinacao);
         while(acumulado <= 1)
         {
             //printf("inclinação %f\n", inclinacao);
-            (*ptr_pixels)[x_inicial][y_inicial].RGB.red = pincel.RGB.red;
-            (*ptr_pixels)[x_inicial][y_inicial].RGB.green = pincel.RGB.green;
-            (*ptr_pixels)[x_inicial][y_inicial].RGB.blue = pincel.RGB.blue;
+            paint_pixels(x_inicial, x_final, ptr_pixels);
             if(x_inicial < x_final)
             {
                 x_inicial++;
@@ -119,7 +56,7 @@ void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_p
                 break;
             }
             acumulado += inclinacao;
-            //printf("Acumulado %f\n", acumulado);
+            printf("Acumulado %f\n", acumulado);
         }
         if(y_inicial < y_final)
         {
@@ -129,12 +66,12 @@ void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_p
         {
             y_inicial--;
         }
-        if(x_inicial == x_final && y_inicial == y_final)
+        if(x_inicial == x_final || y_inicial == y_final)
         {
             break;
         }
 
-            //printf("X %d Y %d b\n", x_inicial, y_inicial);
+        printf("X %d Y %d b\n", x_inicial, y_inicial);
     }
 }
 
@@ -143,26 +80,31 @@ void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     fscanf(arquivo, " %d %d\n", &ptr_desenho->X, &ptr_desenho->Y);
     checar_resolucao(ptr_desenho);
 
-    *ptr_pixels = (pixel**) realloc(*ptr_pixels,
-                    (ptr_desenho->X)*sizeof(pixel*));
+    *ptr_pixels = (pixel**) realloc(
+                                *ptr_pixels,
+                                (ptr_desenho->X)
+                                * sizeof(pixel*));
 
     checar_mempixel(*ptr_pixels, -1);
     for(int i = 0; i < ptr_desenho->X; i++)
     {
-        (*ptr_pixels)[i] = (pixel*) realloc((*ptr_pixels)[i],
-                            (ptr_desenho->Y)*sizeof(pixel));
-
+        (*ptr_pixels)[i] = (pixel*) realloc(
+                                        (*ptr_pixels)[i],
+                                        (ptr_desenho->Y)
+                                        * sizeof(pixel));
         checar_mempixel(*ptr_pixels, i);
     }
 }
 
 void color(FILE *arquivo)
 {
-    fscanf(arquivo, " %d %d %d\n", &pincel.RGB.red, &pincel.RGB.green,
+    fscanf(arquivo, " %d %d %d\n",
+            &pincel.RGB.red,
+            &pincel.RGB.green,
             &pincel.RGB.blue);
 }
 
-void clear(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
+void clear(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     int red, green, blue;
 
@@ -179,11 +121,13 @@ void clear(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
     }
 }
 
-void rect(FILE *arquivo, pixel ***ptr_pixels)
+void rect(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
-    fscanf(arquivo, " %d %d %d\n", &retangulo.X, &retangulo.Y,
+    fscanf(arquivo, " %d %d %d\n",
+            &retangulo.X,
+            &retangulo.Y,
             &retangulo.tamanho);
-    line(0,0,499,499, ptr_pixels);
+    checar_coordenadas(retangulo.X, retangulo.Y, ptr_desenho, "rect");
 }
 
 void circle_line(int x, int y, int decisao, pixel ***ptr_pixels)
@@ -214,69 +158,79 @@ void circle_line(int x, int y, int decisao, pixel ***ptr_pixels)
 }
 
 // Algoritmo de Bresenham copiado.
-void circle(FILE *arquivo, pixel ***ptr_pixels)
+void circle(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     fscanf(arquivo, " %d %d %d\n", &circulo.X, &circulo.Y, &circulo.tamanho);
+    checar_coordenadas(circulo.X, circulo.Y, ptr_desenho, "circle");
 
     circle_line(0, circulo.tamanho, 3-(2*circulo.tamanho), ptr_pixels);
 }
 
-void polygon(FILE *arquivo, poligonal *poligono)
+void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal **ptr_poligono)
 {
-    fscanf(arquivo, " %d", &poligono->pontos);
+    fscanf(arquivo, " %d", &(*ptr_poligono)->pontos);
 
-    poligono = realloc(poligono, poligono->pontos * sizeof(poligonal));
+    *ptr_poligono = (poligonal*) realloc(
+                                    *ptr_poligono,
+                                    (*ptr_poligono)->pontos
+                                    * sizeof(poligonal));
 
-    for(int i = 0; i < poligono->pontos; i++)
+    for(int i = 0; i < (*ptr_poligono)->pontos; i++)
     {
-        fscanf(arquivo, " %d %d", &poligono[i].X, &poligono[i].Y);
+        fscanf(arquivo, " %d %d", &(*ptr_poligono)[i].X, &(*ptr_poligono)[i].Y);
+        checar_coordenadas(
+                        (*ptr_poligono)[i].X,
+                        (*ptr_poligono)[i].Y,
+                        ptr_desenho, "polygon");
+                        printf("%d %d\n", (*ptr_poligono)[i].X, (*ptr_poligono)[i].Y);
     }
+
+    int i;
+    while((*ptr_poligono)->pontos > 1)
+    {
+        i = (*ptr_poligono)->pontos-1;
+        printf("vai\n");
+
+        line((*ptr_poligono)[i].X, (*ptr_poligono)[i].Y, (*ptr_poligono)[i-1].X, (*ptr_poligono)[i-1].Y, ptr_pixels);
+        printf("%d %d %d %d\n",(*ptr_poligono)[i].X, (*ptr_poligono)[i].Y, (*ptr_poligono)[0].X, (*ptr_poligono)[0].Y);
+        (*ptr_poligono)->pontos--;
+        *ptr_poligono = (poligonal*) realloc(
+                                        *ptr_poligono,
+                                        (*ptr_poligono)->pontos
+                                        * sizeof(poligonal));
+        printf("%d\n", i);
+    }
+    printf("banana");
 }
 
-void fill_spread(int X, int Y, pixel ***ptr_pixels, imagem *ptr_desenho)
+void fill_spread(int X, int Y, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
+    printf("%d %d\n", X, Y);
     paint_pixels(X, Y, ptr_pixels);
 
-    if(Y+1 < ptr_desenho->Y &&
-        (*ptr_pixels)[X][Y+1].RGB.red == pincel_fill.RGB.red &&
-        (*ptr_pixels)[X][Y+1].RGB.green == pincel_fill.RGB.green &&
-        (*ptr_pixels)[X][Y+1].RGB.blue == pincel_fill.RGB.blue)
+    if(Y+1 < ptr_desenho->Y && checar_proxpixel(X, Y+1, ptr_pixels))
     {
-        fill_spread(X, Y+1, ptr_pixels, ptr_desenho);
+        fill_spread(X, Y+1, ptr_desenho, ptr_pixels);
     }
 
-    if(Y-1 >=0 && (*ptr_pixels)[X][Y-1].RGB.red == pincel_fill.RGB.red &&
-        (*ptr_pixels)[X][Y-1].RGB.green == pincel_fill.RGB.green &&
-        (*ptr_pixels)[X][Y-1].RGB.blue == pincel_fill.RGB.blue)
+    if(Y-1 >= 0 && checar_proxpixel(X, Y-1, ptr_pixels))
     {
-        (*ptr_pixels)[X][Y].RGB.red = pincel.RGB.red;
-        (*ptr_pixels)[X][Y].RGB.green = pincel.RGB.blue;
-        (*ptr_pixels)[X][Y].RGB.blue = pincel.RGB.green;
-        fill_spread(X, Y-1, ptr_pixels, ptr_desenho);
+        fill_spread(X, Y-1, ptr_desenho, ptr_pixels);
     }
 
-    if(X+1 < ptr_desenho->X &&
-        (*ptr_pixels)[X+1][Y].RGB.red == pincel_fill.RGB.red &&
-        (*ptr_pixels)[X+1][Y].RGB.green == pincel_fill.RGB.green &&
-        (*ptr_pixels)[X+1][Y].RGB.blue == pincel_fill.RGB.blue)
+    if(X+1 < ptr_desenho->X && checar_proxpixel(X+1, Y, ptr_pixels))
     {
-        (*ptr_pixels)[X][Y].RGB.red = pincel.RGB.red;
-        (*ptr_pixels)[X][Y].RGB.green = pincel.RGB.blue;
-        (*ptr_pixels)[X][Y].RGB.blue = pincel.RGB.green;
-        fill_spread(X+1, Y, ptr_pixels, ptr_desenho);
+        fill_spread(X+1, Y, ptr_desenho, ptr_pixels);
     }
-    if(X-1 >= 0 && (*ptr_pixels)[X-1][Y].RGB.red == pincel_fill.RGB.red &&
-        (*ptr_pixels)[X-1][Y].RGB.green == pincel_fill.RGB.green &&
-        (*ptr_pixels)[X-1][Y].RGB.blue == pincel_fill.RGB.blue)
+
+    if(X-1 >= 0 && checar_proxpixel(X-1, Y, ptr_pixels))
     {
-        (*ptr_pixels)[X][Y].RGB.red = pincel.RGB.red;
-        (*ptr_pixels)[X][Y].RGB.green = pincel.RGB.blue;
-        (*ptr_pixels)[X][Y].RGB.blue = pincel.RGB.green;
-        fill_spread(X-1, Y, ptr_pixels, ptr_desenho);
+        fill_spread(X-1, Y, ptr_desenho, ptr_pixels);
     }
+
 }
 
-void fill(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
+void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     int X, Y;
 
@@ -287,10 +241,10 @@ void fill(FILE *arquivo, pixel ***ptr_pixels, imagem *ptr_desenho)
     pincel_fill.RGB.green = (*ptr_pixels)[X][Y].RGB.green;
     pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 
-    fill_spread(X, Y, ptr_pixels, ptr_desenho);
+    fill_spread(X, Y,ptr_desenho, ptr_pixels );
 }
 
-void save(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
+void save(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     FILE *arquivo_imagem;
     char nome_imagem[30];
@@ -319,7 +273,7 @@ void save(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
     fclose(arquivo_imagem);
 }
 
-void open(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
+void open(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     FILE *input_imagem;
     char nome_imagem[30];
@@ -330,20 +284,27 @@ void open(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
     input_imagem = fopen(nome_imagem, "r");
     checar_fopen(input_imagem);
 
-    fscanf(input_imagem, "%s\n%d %d\n%d", formato, &ptr_desenho->X,
+    fscanf(input_imagem, "%s\n%d %d\n%d",
+            formato, &ptr_desenho->X,
             &ptr_desenho->Y, &qualidade);
     checar_formato(formato);
     checar_resolucao(ptr_desenho);
     if(qualidade != 255)
+    {
         printf("Qualidade inválida. Abra um arquivo com qualidade 255.\n");
+    }
 
-    *ptr_pixels = (pixel**) realloc(*ptr_pixels,
-                                    (ptr_desenho->X)*sizeof(pixel*));
+    *ptr_pixels = (pixel**) realloc(
+                                *ptr_pixels,
+                                (ptr_desenho->X)
+                                * sizeof(pixel*));
     checar_mempixel(*ptr_pixels, -1);
     for(int i = 0; i < ptr_desenho->X; i++)
     {
-        (*ptr_pixels)[i] = (pixel*) realloc((*ptr_pixels)[i],
-                                            (ptr_desenho->Y)*sizeof(pixel));
+        (*ptr_pixels)[i] = (pixel*) realloc(
+                                        (*ptr_pixels)[i],
+                                        (ptr_desenho->Y)
+                                        * sizeof(pixel));
         checar_mempixel(*ptr_pixels, i);
     }
 
@@ -355,9 +316,10 @@ void open(FILE *arquivo_input, pixel ***ptr_pixels, imagem *ptr_desenho)
                     &(*ptr_pixels)[i][j].RGB.red,
                     &(*ptr_pixels)[i][j].RGB.green,
                     &(*ptr_pixels)[i][j].RGB.blue);
-            printf("%d %d %d %d %d\n", i, j, (*ptr_pixels)[i][j].RGB.red,
-            (*ptr_pixels)[i][j].RGB.green,
-            (*ptr_pixels)[i][j].RGB.blue);
+            printf("%d %d %d %d %d\n",
+                    i, j, (*ptr_pixels)[i][j].RGB.red,
+                    (*ptr_pixels)[i][j].RGB.green,
+                    (*ptr_pixels)[i][j].RGB.blue);
         }
     }
 

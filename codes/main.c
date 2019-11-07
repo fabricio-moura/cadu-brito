@@ -15,6 +15,7 @@ int main()
     imagem desenho;
     imagem *ptr_desenho = &desenho;
     poligonal *poligono;
+    poligonal **ptr_poligono;
 
     pixels = (pixel**) malloc(1*sizeof(pixel*));
     checar_mempixel(pixels, -1);
@@ -29,35 +30,33 @@ int main()
 
     while(fscanf(arquivo_input,"%s", primitiva) != EOF)
     {
-        poligono = (poligonal*) malloc(3*sizeof(poligono));
-        if(poligono == NULL)
-        {
-            printf("Erro! Memória Insuficiente\n");
-            exit(1);
-        }
+        poligono = (poligonal*) malloc(3 * sizeof(poligono));
+        checar_mempoligono(poligono);
+
+        ptr_poligono = &poligono;
 
         switch(checar_primitiva(primitiva))
         {
             case primitive_image:
                 image(arquivo_input, ptr_desenho, ptr_pixels);
-                //octante(ptr_desenho, ptr_pixels);
-
                 break;
-            case primitive_color: color(arquivo_input);
+            case primitive_color:
+                color(arquivo_input);
                 printf("Color setada para %d %d %d\n", pincel.RGB.red, pincel.RGB.green,
                         pincel.RGB.blue);
                 break;
-            case primitive_clear: clear(arquivo_input, ptr_pixels, ptr_desenho);
+            case primitive_clear:
+                clear(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
-            case primitive_rect: rect(arquivo_input, ptr_pixels);
+            case primitive_rect: rect(arquivo_input, ptr_desenho, ptr_pixels);
                 printf("Retangulo X Y Tam %d %d %d\n", retangulo.X, retangulo.Y,
                         retangulo.tamanho);
                 break;
-            case primitive_circle: circle(arquivo_input, ptr_pixels);
+            case primitive_circle: circle(arquivo_input, ptr_desenho, ptr_pixels);
                 printf("Circulo X Y Tam %d %d %d\n", circulo.X, circulo.Y, circulo.tamanho);
                 break;
             case primitive_polygon:
-                polygon(arquivo_input, poligono);
+                polygon(arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
                 printf("Poligono com %d pontos\n", poligono->pontos);
                 for(int i = 0; i < poligono->pontos; i++)
                 {
@@ -65,17 +64,18 @@ int main()
                 }
                 free(poligono);
                 break;
-            case primitive_fill: fill(arquivo_input, ptr_pixels, ptr_desenho);
+            case primitive_fill: fill(arquivo_input, ptr_desenho, ptr_pixels );
                 printf("Pintando tudo de %d %d %d\n", pincel.RGB.red, pincel.RGB.green,
                         pincel.RGB.blue);
                 break;
             case primitive_save:
-                save(arquivo_input, ptr_pixels, ptr_desenho);
+                save(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
             case primitive_open:
-                open(arquivo_input, ptr_pixels, ptr_desenho);
+                open(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
-            default: printf("Primitiva inválida\n");
+            default:
+                printf("Primitiva inválida\n");
                 exit(1);
         }
     }
