@@ -133,3 +133,23 @@ int checar_proxpixel(int X, int Y, pixel ***ptr_pixels)
 
     return 0;
 }
+
+void checar_cor(int red, int green, int blue, char *comando)
+{
+    if( red > 255 || red < 0
+        || green > 255 || green < 0
+        || blue > 255 || blue < 0)
+    {
+        printf("Cor inválida no comando %s.\n", comando);
+        exit(1);
+    }
+}
+
+void checar_pontos(poligonal **ptr_poligono)
+{
+    if((*ptr_poligono)->pontos < 3)
+    {
+        printf("Quantidade de pontos inválida.\n");
+        exit(1);
+    }
+}

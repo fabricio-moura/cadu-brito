@@ -58,10 +58,6 @@ int main()
             case primitive_polygon:
                 polygon(arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
                 printf("Poligono com %d pontos\n", poligono->pontos);
-                for(int i = 0; i < poligono->pontos; i++)
-                {
-                    printf("Coordenadas X Y %d %d\n", poligono[i].X, poligono[i].Y);
-                }
                 free(poligono);
                 break;
             case primitive_fill: fill(arquivo_input, ptr_desenho, ptr_pixels );

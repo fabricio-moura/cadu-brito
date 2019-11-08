@@ -40,6 +40,13 @@ struct circle
     int tamanho;
 } circulo;
 
+struct line
+{
+    int dx;
+    int dy;
+    int decisao;
+} linha;
+
 typedef struct
 {
     int X;

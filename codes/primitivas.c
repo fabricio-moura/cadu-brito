@@ -7,6 +7,138 @@ void paint_pixels(int eixo_x, int eixo_y, pixel ***ptr_pixels)
     (*ptr_pixels)[eixo_x][eixo_y].RGB.blue = pincel.RGB.blue;
 }
 
+void line_dx(
+    int x_final,
+    int y_final,
+    int x_inicial,
+    int y_inicial,
+    int contador,
+    pixel ***ptr_pixels)
+{
+    paint_pixels(x_inicial, y_inicial, ptr_pixels);
+    printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
+    if(x_inicial != x_final && y_final != y_inicial)
+    {
+        if(linha.decisao < 0 && y_final > y_inicial)
+        {
+            linha.decisao += 2 * linha.dx;
+            line_dx(x_final, y_final, x_inicial, y_inicial+1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao < 0 && y_final < y_inicial)
+        {
+            linha.decisao += 2 * linha.dx;
+            line_dx(x_final, y_final, x_inicial, y_inicial-1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final > x_inicial && y_final > y_inicial)
+        {
+            linha.decisao += 2*linha.dx - 2*linha.dy;
+            line_dx(x_final, y_final, x_inicial+1, y_inicial+1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final < x_inicial && y_final < y_inicial)
+        {
+            linha.decisao += 2*linha.dx - 2*linha.dy;
+            line_dx(x_final, y_final, x_inicial-1, y_inicial-1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final < x_inicial && y_final > y_inicial)
+        {
+            linha.decisao += 2*linha.dx - 2*linha.dy;
+            line_dx(x_final, y_final, x_inicial-1, y_inicial+1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final > x_inicial && y_final < y_inicial)
+        {
+            linha.decisao += 2*linha.dx - 2*linha.dy;
+            line_dx(x_final, y_final, x_inicial+1, y_inicial-1, contador+1, ptr_pixels);
+        }
+        else if(x_final == x_inicial || y_final == y_inicial)
+        {
+            printf("tigre\n");
+            line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
+        }
+    }
+}
+
+void line_dy(
+    int x_final,
+    int y_final,
+    int x_inicial,
+    int y_inicial,
+    int contador,
+    pixel ***ptr_pixels)
+{
+    paint_pixels(x_inicial, y_inicial, ptr_pixels);
+    printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
+    printf("decisao %d\n", linha.decisao);
+    if(x_inicial != x_final && y_final != y_inicial)
+    {
+        printf("porra\n");
+        if(linha.decisao < 0 && x_final > x_inicial)
+        {
+            linha.decisao += 2 * linha.dy;
+            line_dy(x_final, y_final, x_inicial+1, y_inicial, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao < 0 && x_final < x_inicial)
+        {
+            linha.decisao += 2 * linha.dy;
+            line_dy(x_final, y_final, x_inicial-1, y_inicial, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final > x_inicial && y_final > y_inicial)
+        {
+            linha.decisao += 2*linha.dy - 2*linha.dx;
+            line_dy(x_final, y_final, x_inicial+1, y_inicial+1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final < x_inicial && y_final < y_inicial)
+        {
+            linha.decisao += 2*linha.dy - 2*linha.dx;
+            line_dy(x_final, y_final, x_inicial-1, y_inicial-1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final < x_inicial && y_final > y_inicial)
+        {
+            linha.decisao += 2*linha.dy - 2*linha.dx;
+            line_dy(x_final, y_final, x_inicial-1, y_inicial+1, contador+1, ptr_pixels);
+        }
+        else if(linha.decisao >= 0 && x_final > x_inicial && y_final < y_inicial)
+        {
+            linha.decisao += 2*linha.dy - 2*linha.dx;
+            line_dy(x_final, y_final, x_inicial+1, y_inicial-1, contador+1, ptr_pixels);
+        }
+        else if(x_final == x_inicial || y_final == y_inicial)
+        {
+            printf("quati\n");
+            line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
+        }
+    }
+}
+
+void line_straight(
+    int x_final,
+    int y_final,
+    int x_inicial,
+    int y_inicial,
+    pixel ***ptr_pixels)
+{
+    paint_pixels(x_inicial, y_inicial, ptr_pixels);
+    printf("cobre\n");
+    if(x_inicial != x_final && y_final != y_inicial)
+        {
+        if(x_final > x_inicial && y_final == y_inicial)
+        {
+            line_straight(x_final, y_final, x_inicial+1, y_inicial, ptr_pixels);
+        }
+        else if(x_final == x_inicial && y_final > y_inicial)
+        {
+            line_straight(x_final, y_final, x_inicial, y_inicial+1, ptr_pixels);
+        }
+        else if(x_final < x_inicial && y_final == y_inicial)
+        {
+            line_straight(x_final, y_final, x_inicial-1, y_inicial, ptr_pixels);
+        }
+        else if(x_final == x_inicial && y_final < y_inicial)
+        {
+            line_straight(x_final, y_final, x_inicial, y_inicial-1, ptr_pixels);
+        }
+    }
+}
+
 void line(
     int x_final,
     int y_final,
@@ -15,64 +147,29 @@ void line(
     pixel ***ptr_pixels)
 {
     float inclinacao;
-    float acumulado;
-    if(y_final - y_inicial == 0)
-    {
-        inclinacao = 1;
-    }
-    else if(x_final - x_inicial == 0)
-    {
-        inclinacao = 1;
-    }
-    else
-    {
-        inclinacao = (float) (y_final - y_inicial)/(x_final - x_inicial);
-    }
-    inclinacao = fabs(inclinacao);
 
-    while(
-        x_inicial <= x_final
-        || y_inicial <= y_final
-        || x_inicial >= x_final
-        || y_inicial >= y_final)
-    {
-        printf("X %d Y %d\n", x_inicial, y_inicial);
-        acumulado = inclinacao;
-        printf("inclinação %f\n", inclinacao);
-        while(acumulado <= 1)
-        {
-            //printf("inclinação %f\n", inclinacao);
-            paint_pixels(x_inicial, x_final, ptr_pixels);
-            if(x_inicial < x_final)
-            {
-                x_inicial++;
-            }
-            else if(x_inicial > x_final)
-            {
-                x_inicial--;
-            }
-            else
-            {
-                break;
-            }
-            acumulado += inclinacao;
-            printf("Acumulado %f\n", acumulado);
-        }
-        if(y_inicial < y_final)
-        {
-            y_inicial++;
-        }
-        else if(y_inicial > y_final)
-        {
-            y_inicial--;
-        }
-        if(x_inicial == x_final || y_inicial == y_final)
-        {
-            break;
-        }
+    inclinacao = (float) (y_final - y_inicial)/(x_final - x_inicial);
 
-        printf("X %d Y %d b\n", x_inicial, y_inicial);
+    linha.dx = abs(x_final - x_inicial);
+    linha.dy = abs(y_final - y_inicial);
+    linha.decisao = 2*linha.dy - linha.dx;
+    if(linha.dy == 0 || linha.dx == 0) inclinacao = 1;
+    printf("%f\n", inclinacao);
+    if(inclinacao > 1)
+    {
+        printf("dx\n");
+        line_dx(x_final, y_final, x_inicial, y_inicial, 0, ptr_pixels);
     }
+    else if(inclinacao == 1 && (x_inicial == x_final || y_inicial == y_final))
+    {
+        line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
+    }
+    else if(inclinacao <= 1)
+    {
+        printf("dy\n");
+        line_dy(x_final, y_final, x_inicial, y_inicial, 0, ptr_pixels);
+    }
+
 }
 
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
@@ -102,14 +199,16 @@ void color(FILE *arquivo)
             &pincel.RGB.red,
             &pincel.RGB.green,
             &pincel.RGB.blue);
+    checar_cor(pincel.RGB.red, pincel.RGB.green, pincel.RGB.blue, "color");
 }
 
 void clear(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     int red, green, blue;
 
-    fscanf(arquivo, " %d %d %d\n", &red, &blue, &green);
-    printf("Clear na cor %d %d %d\n", red, blue, green);
+    fscanf(arquivo, " %d %d %d\n", &red, &green, &blue);
+    checar_cor(red, green, blue, "clear");
+    printf("Clear na cor %d %d %d\n", red, green, blue);
     for(int i = 0; i < ptr_desenho->X; i++)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
@@ -169,38 +268,39 @@ void circle(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal **ptr_poligono)
 {
     fscanf(arquivo, " %d", &(*ptr_poligono)->pontos);
+    checar_pontos(ptr_poligono);
 
     *ptr_poligono = (poligonal*) realloc(
                                     *ptr_poligono,
-                                    (*ptr_poligono)->pontos
+                                    ((*ptr_poligono)->pontos+1)
                                     * sizeof(poligonal));
+    checar_mempoligono(*ptr_poligono);
 
-    for(int i = 0; i < (*ptr_poligono)->pontos; i++)
+    for(int i = 1; i < (*ptr_poligono)->pontos+1; i++)
     {
-        fscanf(arquivo, " %d %d", &(*ptr_poligono)[i].X, &(*ptr_poligono)[i].Y);
+        fscanf(arquivo, "%d %d", &(*ptr_poligono)[i].X, &(*ptr_poligono)[i].Y);
         checar_coordenadas(
                         (*ptr_poligono)[i].X,
                         (*ptr_poligono)[i].Y,
                         ptr_desenho, "polygon");
                         printf("%d %d\n", (*ptr_poligono)[i].X, (*ptr_poligono)[i].Y);
+        if(i == (*ptr_poligono)->pontos)
+        {
+            (*ptr_poligono)[0].X = (*ptr_poligono)[i].X;
+            (*ptr_poligono)[0].Y = (*ptr_poligono)[i].Y;
+        };
     }
 
-    int i;
-    while((*ptr_poligono)->pontos > 1)
+    for(int i = (*ptr_poligono)->pontos; i > 0; i--)
     {
-        i = (*ptr_poligono)->pontos-1;
-        printf("vai\n");
+        //printf("Final %d %d Inicial %d %d\n",(*ptr_poligono)[i-1].X, (*ptr_poligono)[i-1].Y, (*ptr_poligono)[i].X, (*ptr_poligono)[i].Y);
+        line((*ptr_poligono)[i-1].X, (*ptr_poligono)[i-1].Y, (*ptr_poligono)[i].X, (*ptr_poligono)[i].Y, ptr_pixels);
 
-        line((*ptr_poligono)[i].X, (*ptr_poligono)[i].Y, (*ptr_poligono)[i-1].X, (*ptr_poligono)[i-1].Y, ptr_pixels);
-        printf("%d %d %d %d\n",(*ptr_poligono)[i].X, (*ptr_poligono)[i].Y, (*ptr_poligono)[0].X, (*ptr_poligono)[0].Y);
-        (*ptr_poligono)->pontos--;
         *ptr_poligono = (poligonal*) realloc(
                                         *ptr_poligono,
-                                        (*ptr_poligono)->pontos
-                                        * sizeof(poligonal));
-        printf("%d\n", i);
+                                        i * sizeof(poligonal));
+        checar_mempoligono(*ptr_poligono);
     }
-    printf("banana");
 }
 
 void fill_spread(int X, int Y, imagem *ptr_desenho, pixel ***ptr_pixels)
@@ -241,7 +341,7 @@ void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     pincel_fill.RGB.green = (*ptr_pixels)[X][Y].RGB.green;
     pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 
-    fill_spread(X, Y,ptr_desenho, ptr_pixels );
+    fill_spread(X, Y,ptr_desenho, ptr_pixels);
 }
 
 void save(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
@@ -316,6 +416,11 @@ void open(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
                     &(*ptr_pixels)[i][j].RGB.red,
                     &(*ptr_pixels)[i][j].RGB.green,
                     &(*ptr_pixels)[i][j].RGB.blue);
+            checar_cor(
+                    (*ptr_pixels)[i][j].RGB.red,
+                    (*ptr_pixels)[i][j].RGB.green,
+                    (*ptr_pixels)[i][j].RGB.blue,
+                    "open");
             printf("%d %d %d %d %d\n",
                     i, j, (*ptr_pixels)[i][j].RGB.red,
                     (*ptr_pixels)[i][j].RGB.green,
