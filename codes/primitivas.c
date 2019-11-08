@@ -17,9 +17,16 @@ void line_dx(
 {
     paint_pixels(x_inicial, y_inicial, ptr_pixels);
     printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
-    if(x_inicial != x_final && y_final != y_inicial)
+    if(x_inicial != x_final || y_final != y_inicial)
     {
-        if(linha.decisao < 0 && y_final > y_inicial)
+        printf("mamute\n");
+        printf("dec %d\n", linha.decisao);
+        if(x_final == x_inicial || y_final == y_inicial)
+        {
+            printf("tigre\n");
+            line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
+        }
+        else if(linha.decisao < 0 && y_final > y_inicial)
         {
             linha.decisao += 2 * linha.dx;
             line_dx(x_final, y_final, x_inicial, y_inicial+1, contador+1, ptr_pixels);
@@ -49,11 +56,6 @@ void line_dx(
             linha.decisao += 2*linha.dx - 2*linha.dy;
             line_dx(x_final, y_final, x_inicial+1, y_inicial-1, contador+1, ptr_pixels);
         }
-        else if(x_final == x_inicial || y_final == y_inicial)
-        {
-            printf("tigre\n");
-            line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
-        }
     }
 }
 
@@ -68,10 +70,15 @@ void line_dy(
     paint_pixels(x_inicial, y_inicial, ptr_pixels);
     printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
     printf("decisao %d\n", linha.decisao);
-    if(x_inicial != x_final && y_final != y_inicial)
+    if(x_inicial != x_final || y_final != y_inicial)
     {
         printf("porra\n");
-        if(linha.decisao < 0 && x_final > x_inicial)
+        if(x_final == x_inicial || y_final == y_inicial)
+        {
+            printf("quati\n");
+            line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
+        }
+        else if(linha.decisao < 0 && x_final > x_inicial)
         {
             linha.decisao += 2 * linha.dy;
             line_dy(x_final, y_final, x_inicial+1, y_inicial, contador+1, ptr_pixels);
@@ -101,11 +108,6 @@ void line_dy(
             linha.decisao += 2*linha.dy - 2*linha.dx;
             line_dy(x_final, y_final, x_inicial+1, y_inicial-1, contador+1, ptr_pixels);
         }
-        else if(x_final == x_inicial || y_final == y_inicial)
-        {
-            printf("quati\n");
-            line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
-        }
     }
 }
 
@@ -118,7 +120,8 @@ void line_straight(
 {
     paint_pixels(x_inicial, y_inicial, ptr_pixels);
     printf("cobre\n");
-    if(x_inicial != x_final && y_final != y_inicial)
+    printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
+    if(x_inicial != x_final || y_final != y_inicial)
         {
         if(x_final > x_inicial && y_final == y_inicial)
         {
@@ -153,9 +156,10 @@ void line(
     linha.dx = abs(x_final - x_inicial);
     linha.dy = abs(y_final - y_inicial);
     linha.decisao = 2*linha.dy - linha.dx;
+    printf("dx %d dy %d\n", linha.dx, linha.dy);
     if(linha.dy == 0 || linha.dx == 0) inclinacao = 1;
-    printf("%f\n", inclinacao);
-    if(inclinacao > 1)
+    printf("inc %f\n", inclinacao);
+    if(inclinacao > 1 || inclinacao < -1)
     {
         printf("dx\n");
         line_dx(x_final, y_final, x_inicial, y_inicial, 0, ptr_pixels);
@@ -164,7 +168,7 @@ void line(
     {
         line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
     }
-    else if(inclinacao <= 1)
+    else if((inclinacao < 1 && inclinacao > 0) || (inclinacao < 0 && inclinacao > -1))
     {
         printf("dy\n");
         line_dy(x_final, y_final, x_inicial, y_inicial, 0, ptr_pixels);
