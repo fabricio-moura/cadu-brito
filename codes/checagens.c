@@ -121,17 +121,14 @@ void checar_coordenadas(int X, int Y, imagem *ptr_desenho, char *comando)
 
 int checar_proxpixel(int X, int Y, pixel ***ptr_pixels)
 {
-    if((*ptr_pixels)[X][Y].RGB.red == pincel_fill.RGB.red
-        && (*ptr_pixels)[X][Y].RGB.green == pincel_fill.RGB.green
-        && (*ptr_pixels)[X][Y].RGB.blue == pincel_fill.RGB.blue
-        && ((*ptr_pixels)[X][Y].RGB.red != pincel.RGB.red
-        || (*ptr_pixels)[X][Y].RGB.green != pincel.RGB.green
-        || (*ptr_pixels)[X][Y].RGB.blue != pincel.RGB.blue))
+    if((*ptr_pixels)[X][Y].RGB.red != pincel_fill.RGB.red
+        || (*ptr_pixels)[X][Y].RGB.green != pincel_fill.RGB.green
+        || (*ptr_pixels)[X][Y].RGB.blue != pincel_fill.RGB.blue)
     {
-        return 1;
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 void checar_cor(int red, int green, int blue, char *comando)

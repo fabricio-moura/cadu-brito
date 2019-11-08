@@ -19,11 +19,9 @@ void line_dx(
     printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
     if(x_inicial != x_final || y_final != y_inicial)
     {
-        printf("mamute\n");
         printf("dec %d\n", linha.decisao);
         if(x_final == x_inicial || y_final == y_inicial)
         {
-            printf("tigre\n");
             line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
         }
         else if(linha.decisao < 0 && y_final > y_inicial)
@@ -72,10 +70,8 @@ void line_dy(
     printf("decisao %d\n", linha.decisao);
     if(x_inicial != x_final || y_final != y_inicial)
     {
-        printf("porra\n");
         if(x_final == x_inicial || y_final == y_inicial)
         {
-            printf("quati\n");
             line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
         }
         else if(linha.decisao < 0 && x_final > x_inicial)
@@ -119,7 +115,6 @@ void line_straight(
     pixel ***ptr_pixels)
 {
     paint_pixels(x_inicial, y_inicial, ptr_pixels);
-    printf("cobre\n");
     printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
     if(x_inicial != x_final || y_final != y_inicial)
         {
@@ -159,7 +154,7 @@ void line(
     printf("dx %d dy %d\n", linha.dx, linha.dy);
     if(linha.dy == 0 || linha.dx == 0) inclinacao = 1;
     printf("inc %f\n", inclinacao);
-    if(inclinacao > 1 || inclinacao < -1)
+    if(inclinacao >= 1 || inclinacao <= -1)
     {
         printf("dx\n");
         line_dx(x_final, y_final, x_inicial, y_inicial, 0, ptr_pixels);
@@ -345,7 +340,7 @@ void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     pincel_fill.RGB.green = (*ptr_pixels)[X][Y].RGB.green;
     pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 
-    fill_spread(X, Y,ptr_desenho, ptr_pixels);
+    fill_spread(X, Y, ptr_desenho, ptr_pixels);
 }
 
 void save(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
