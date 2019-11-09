@@ -173,7 +173,7 @@ void line(
 
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
-    fscanf(arquivo, " %d %d\n", &ptr_desenho->X, &ptr_desenho->Y);
+    fscanf(arquivo, " %hu %hu\n", &ptr_desenho->X, &ptr_desenho->Y);
     checar_resolucao(ptr_desenho);
 
     *ptr_pixels = (pixel**) realloc(
@@ -194,7 +194,7 @@ void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 
 void color(FILE *arquivo)
 {
-    fscanf(arquivo, " %d %d %d\n",
+    fscanf(arquivo, " %hhu %hhu %hhu\n",
             &pincel.RGB.red,
             &pincel.RGB.green,
             &pincel.RGB.blue);
@@ -221,11 +221,28 @@ void clear(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 
 void rect(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
-    fscanf(arquivo, " %d %d %d\n",
+    fscanf(arquivo, " %d %d %d %d\n",
             &retangulo.X,
             &retangulo.Y,
-            &retangulo.tamanho);
+            &retangulo.altura,
+            &retangulo.largura);
     checar_coordenadas(retangulo.X, retangulo.Y, ptr_desenho, "rect");
+    if(retangulo.X + retangulo.altura < ptr_desenho.X && retangulo.Y + retangulo.largura < ptr_desenho.Y)
+    {
+
+    }
+    else if(retangulo.X + retangulo.altura > ptr_desenho.X && retangulo.Y + retangulo.largura < ptr_desenho.Y)
+    {
+
+    }
+    else if(retangulo.X + retangulo.altura > ptr_desenho.X && retangulo.Y + retangulo.largura > ptr_desenho.Y)
+    {
+
+    }
+    else if()
+    {
+        
+    }
 }
 
 void circle_line(int x, int y, int decisao, pixel ***ptr_pixels)
@@ -302,9 +319,9 @@ void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal 
     }
 }
 
-void fill_spread(int X, int Y, imagem *ptr_desenho, pixel ***ptr_pixels)
+void fill_spread(unsigned short X, unsigned short Y, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
-    printf("%d %d\n", X, Y);
+    printf("%hu %hu\n", X, Y);
     paint_pixels(X, Y, ptr_pixels);
 
     if(Y+1 < ptr_desenho->Y && checar_proxpixel(X, Y+1, ptr_pixels))
@@ -331,9 +348,9 @@ void fill_spread(int X, int Y, imagem *ptr_desenho, pixel ***ptr_pixels)
 
 void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
-    int X, Y;
+    unsigned short X, Y;
 
-    fscanf(arquivo, " %d %d\n", &X, &Y);
+    fscanf(arquivo, " %hu %hu\n", &X, &Y);
     checar_coordenadas(X, Y, ptr_desenho, "fill");
 
     pincel_fill.RGB.red = (*ptr_pixels)[X][Y].RGB.red;
@@ -383,7 +400,7 @@ void open(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
     input_imagem = fopen(nome_imagem, "r");
     checar_fopen(input_imagem);
 
-    fscanf(input_imagem, "%s\n%d %d\n%d",
+    fscanf(input_imagem, "%s\n%hu %hu\n%d",
             formato, &ptr_desenho->X,
             &ptr_desenho->Y, &qualidade);
     checar_formato(formato);
@@ -411,7 +428,7 @@ void open(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
         {
-            fscanf(input_imagem, "%d %d %d",
+            fscanf(input_imagem, "%hhu %hhu %hhu",
                     &(*ptr_pixels)[i][j].RGB.red,
                     &(*ptr_pixels)[i][j].RGB.green,
                     &(*ptr_pixels)[i][j].RGB.blue);

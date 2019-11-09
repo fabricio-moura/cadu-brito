@@ -3,21 +3,21 @@
 
 typedef struct
 {
-    int red;
-    int green;
-    int blue;
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
 } cor;
 
 typedef struct
 {
-    int X;
-    int Y;
+    unsigned short X;
+    unsigned short Y;
 } imagem;
 
 typedef struct
 {
-    int X;
-    int Y;
+    unsigned short X;
+    unsigned short Y;
     cor RGB;
 } pixel;
 
@@ -30,7 +30,8 @@ struct rect
 {
     int X;
     int Y;
-    int tamanho;
+    int lado_menor;
+    int lado_maior;
 } retangulo;
 
 struct circle
