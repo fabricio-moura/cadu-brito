@@ -51,6 +51,15 @@ void checar_formato(char *formato)
     }
 }
 
+void checar_qualidade(int qualidade)
+{
+    if(qualidade != 255)
+    {
+        printf("Qualidade inválida. Abra um arquivo com qualidade 255.\n");
+        exit(1);
+    }
+}
+
 void checar_resolucao(imagem *ptr_desenho)
 {
     if(ptr_desenho->X < 1 || ptr_desenho->Y < 1 ||

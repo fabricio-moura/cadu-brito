@@ -9,6 +9,7 @@
 
 int checar_primitiva(char *primitiva);
 void checar_formato(char *formato);
+void checar_qualidade(int qualidade);
 void checar_resolucao(imagem *ptr_desenho);
 void checar_mempixel(pixel **pixels, int counter);
 void checar_mempoligono(poligonal *poligono);

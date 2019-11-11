@@ -26,14 +26,6 @@ struct paint
     cor RGB;
 } pincel, pincel_fill;
 
-struct rect
-{
-    int X;
-    int Y;
-    int lado_menor;
-    int lado_maior;
-} retangulo;
-
 struct circle
 {
     int X;

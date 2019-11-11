@@ -219,29 +219,45 @@ void clear(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     }
 }
 
-void rect(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
+void rect(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal **ptr_poligono)
 {
-    fscanf(arquivo, " %d %d %d %d\n",
-            &retangulo.X,
-            &retangulo.Y,
-            &retangulo.altura,
-            &retangulo.largura);
-    checar_coordenadas(retangulo.X, retangulo.Y, ptr_desenho, "rect");
-    if(retangulo.X + retangulo.altura < ptr_desenho.X && retangulo.Y + retangulo.largura < ptr_desenho.Y)
-    {
+    int X, Y;
+    int largura, altura;
 
-    }
-    else if(retangulo.X + retangulo.altura > ptr_desenho.X && retangulo.Y + retangulo.largura < ptr_desenho.Y)
-    {
+    fscanf(arquivo, " %d %d %d %d\n", &X, &Y, &largura, &altura);
+    checar_coordenadas(X, Y, ptr_desenho, "rect");
 
-    }
-    else if(retangulo.X + retangulo.altura > ptr_desenho.X && retangulo.Y + retangulo.largura > ptr_desenho.Y)
+    if(X + altura < ptr_desenho->X && Y + largura < ptr_desenho->Y)
     {
-
+        line_straight(X, Y + largura, X, Y, ptr_pixels);
+        line_straight(X + altura, Y + largura, X, Y + largura, ptr_pixels);
+        line_straight(X + altura, Y, X + altura, Y + largura, ptr_pixels);
+        line_straight(X, Y, X + altura, Y, ptr_pixels);
     }
-    else if()
+    else if(X + altura > ptr_desenho->X && Y + largura < ptr_desenho->Y)
     {
-        
+        line_straight(X, Y + largura, X, Y, ptr_pixels);
+        line_straight(X - altura, Y + largura, X, Y + largura, ptr_pixels);
+        line_straight(X - altura, Y, X - altura, Y + largura, ptr_pixels);
+        line_straight(X, Y, X - altura, Y, ptr_pixels);
+    }
+    else if(X + altura > ptr_desenho->X && Y + largura > ptr_desenho->Y && X - altura >= 0 && Y - largura >= 0)
+    {
+        line_straight(X, Y - largura, X, Y, ptr_pixels);
+        line_straight(X - altura, Y - largura, X, Y - largura, ptr_pixels);
+        line_straight(X - altura, Y, X - altura, Y - largura, ptr_pixels);
+        line_straight(X, Y, X - altura, Y, ptr_pixels);
+    }
+    else if(X + altura < ptr_desenho->X && Y + largura > ptr_desenho->Y)
+    {
+        line_straight(X, Y - largura, X, Y, ptr_pixels);
+        line_straight(X + altura, Y - largura, X, Y - largura, ptr_pixels);
+        line_straight(X + altura, Y, X + altura, Y - largura, ptr_pixels);
+        line_straight(X, Y, X + altura, Y, ptr_pixels);
+    }
+    else
+    {
+        printf("Retângulo saindo do desenho.\n");
     }
 }
 
@@ -319,29 +335,30 @@ void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal 
     }
 }
 
-void fill_spread(unsigned short X, unsigned short Y, imagem *ptr_desenho, pixel ***ptr_pixels)
+void fill_spread(unsigned short X, unsigned short Y, unsigned short imagem_X, unsigned short imagem_Y, pixel ***ptr_pixels)
 {
-    printf("%hu %hu\n", X, Y);
-    paint_pixels(X, Y, ptr_pixels);
-
-    if(Y+1 < ptr_desenho->Y && checar_proxpixel(X, Y+1, ptr_pixels))
+    if(Y+1 < imagem_Y && checar_proxpixel(X, Y+1, ptr_pixels))
     {
-        fill_spread(X, Y+1, ptr_desenho, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
+        fill_spread(X, Y+1, imagem_X, imagem_Y, ptr_pixels);
     }
 
-    if(Y-1 >= 0 && checar_proxpixel(X, Y-1, ptr_pixels))
+    else if(Y-1 >= 0 && checar_proxpixel(X, Y-1, ptr_pixels))
     {
-        fill_spread(X, Y-1, ptr_desenho, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
+        fill_spread(X, Y-1, imagem_X, imagem_Y, ptr_pixels);
     }
 
-    if(X+1 < ptr_desenho->X && checar_proxpixel(X+1, Y, ptr_pixels))
+    if(X+1 < imagem_X && checar_proxpixel(X+1, Y, ptr_pixels))
     {
-        fill_spread(X+1, Y, ptr_desenho, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
+        fill_spread(X+1, Y, imagem_X, imagem_Y, ptr_pixels);
     }
 
-    if(X-1 >= 0 && checar_proxpixel(X-1, Y, ptr_pixels))
+    else if(X-1 >= 0 && checar_proxpixel(X-1, Y, ptr_pixels))
     {
-        fill_spread(X-1, Y, ptr_desenho, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
+        fill_spread(X-1, Y, imagem_X, imagem_Y, ptr_pixels);
     }
 
 }
@@ -357,7 +374,7 @@ void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     pincel_fill.RGB.green = (*ptr_pixels)[X][Y].RGB.green;
     pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 
-    fill_spread(X, Y, ptr_desenho, ptr_pixels);
+    fill_spread(X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
 }
 
 void save(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
@@ -368,11 +385,6 @@ void save(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
     fscanf(arquivo_input, " %s", nome_imagem);
     arquivo_imagem = fopen(nome_imagem, "w");
     checar_fopen(arquivo_imagem);
-
-    if(arquivo_imagem == NULL)
-    {
-        printf("Erro na abertura do arquivo!\n");
-    }
 
     fprintf(arquivo_imagem, "P3\n%d %d\n255\n", ptr_desenho->X, ptr_desenho->Y);
     for(int i = 0; i < ptr_desenho->X; i++)
@@ -405,10 +417,7 @@ void open(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
             &ptr_desenho->Y, &qualidade);
     checar_formato(formato);
     checar_resolucao(ptr_desenho);
-    if(qualidade != 255)
-    {
-        printf("Qualidade inválida. Abra um arquivo com qualidade 255.\n");
-    }
+    checar_qualidade(qualidade);
 
     *ptr_pixels = (pixel**) realloc(
                                 *ptr_pixels,

@@ -48,11 +48,11 @@ int main()
             case primitive_clear:
                 clear(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
-            case primitive_rect: rect(arquivo_input, ptr_desenho, ptr_pixels);
-                printf("Retangulo X Y Tam %d %d %d\n", retangulo.X, retangulo.Y,
-                        retangulo.tamanho);
+            case primitive_rect:
+                rect(arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
                 break;
-            case primitive_circle: circle(arquivo_input, ptr_desenho, ptr_pixels);
+            case primitive_circle:
+                circle(arquivo_input, ptr_desenho, ptr_pixels);
                 printf("Circulo X Y Tam %d %d %d\n", circulo.X, circulo.Y, circulo.tamanho);
                 break;
             case primitive_polygon:
@@ -60,7 +60,8 @@ int main()
                 printf("Poligono com %d pontos\n", poligono->pontos);
                 free(poligono);
                 break;
-            case primitive_fill: fill(arquivo_input, ptr_desenho, ptr_pixels );
+            case primitive_fill:
+                fill(arquivo_input, ptr_desenho, ptr_pixels );
                 printf("Pintando tudo de %d %d %d\n", pincel.RGB.red, pincel.RGB.green,
                         pincel.RGB.blue);
                 break;
