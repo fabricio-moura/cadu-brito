@@ -34,6 +34,7 @@ void clear(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void rect(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal **ptr_poligono);
 void circle(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal **ptr_poligono);
+void color_picker(int X, int Y, pixel ***ptr_pixels);
 void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void save(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels);
 void open(FILE *arquivo_input,imagem *ptr_desenho,  pixel ***ptr_pixels);

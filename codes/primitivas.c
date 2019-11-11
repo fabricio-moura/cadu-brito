@@ -22,6 +22,7 @@ void line_dx(
         printf("dec %d\n", linha.decisao);
         if(x_final == x_inicial || y_final == y_inicial)
         {
+            printf("oi");
             line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
         }
         else if(linha.decisao < 0 && y_final > y_inicial)
@@ -72,6 +73,7 @@ void line_dy(
     {
         if(x_final == x_inicial || y_final == y_inicial)
         {
+            printf("oi");
             line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
         }
         else if(linha.decisao < 0 && x_final > x_inicial)
@@ -116,21 +118,21 @@ void line_straight(
 {
     paint_pixels(x_inicial, y_inicial, ptr_pixels);
     printf("de %d %d para %d %d\n", x_inicial, y_inicial, x_final, y_final);
-    if(x_inicial != x_final || y_final != y_inicial)
-        {
-        if(x_final > x_inicial && y_final == y_inicial)
+    if(x_inicial != x_final || y_inicial != y_final)
+    {
+        if(x_final > x_inicial)
         {
             line_straight(x_final, y_final, x_inicial+1, y_inicial, ptr_pixels);
         }
-        else if(x_final == x_inicial && y_final > y_inicial)
+        else if(y_final > y_inicial)
         {
             line_straight(x_final, y_final, x_inicial, y_inicial+1, ptr_pixels);
         }
-        else if(x_final < x_inicial && y_final == y_inicial)
+        else if(x_final < x_inicial)
         {
             line_straight(x_final, y_final, x_inicial-1, y_inicial, ptr_pixels);
         }
-        else if(x_final == x_inicial && y_final < y_inicial)
+        else if(y_final < y_inicial)
         {
             line_straight(x_final, y_final, x_inicial, y_inicial-1, ptr_pixels);
         }
@@ -163,7 +165,8 @@ void line(
     {
         line_straight(x_final, y_final, x_inicial, y_inicial, ptr_pixels);
     }
-    else if((inclinacao < 1 && inclinacao > 0) || (inclinacao < 0 && inclinacao > -1))
+    else if((inclinacao < 1 && inclinacao > 0)
+            || (inclinacao < 0 && inclinacao > -1))
     {
         printf("dy\n");
         line_dy(x_final, y_final, x_inicial, y_inicial, 0, ptr_pixels);
@@ -207,7 +210,7 @@ void clear(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 
     fscanf(arquivo, " %d %d %d\n", &red, &green, &blue);
     checar_cor(red, green, blue, "clear");
-    printf("Clear na cor %d %d %d\n", red, green, blue);
+
     for(int i = 0; i < ptr_desenho->X; i++)
     {
         for(int j = 0; j < ptr_desenho->Y; j++)
@@ -241,7 +244,10 @@ void rect(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal **p
         line_straight(X - altura, Y, X - altura, Y + largura, ptr_pixels);
         line_straight(X, Y, X - altura, Y, ptr_pixels);
     }
-    else if(X + altura > ptr_desenho->X && Y + largura > ptr_desenho->Y && X - altura >= 0 && Y - largura >= 0)
+    else if(X + altura > ptr_desenho->X
+            && Y + largura > ptr_desenho->Y
+            && X - altura >= 0
+            && Y - largura >= 0)
     {
         line_straight(X, Y - largura, X, Y, ptr_pixels);
         line_straight(X - altura, Y - largura, X, Y - largura, ptr_pixels);
@@ -320,7 +326,7 @@ void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal 
         {
             (*ptr_poligono)[0].X = (*ptr_poligono)[i].X;
             (*ptr_poligono)[0].Y = (*ptr_poligono)[i].Y;
-        };
+        }
     }
 
     for(int i = (*ptr_poligono)->pontos; i > 0; i--)
@@ -339,28 +345,34 @@ void fill_spread(unsigned short X, unsigned short Y, unsigned short imagem_X, un
 {
     if(Y+1 < imagem_Y && checar_proxpixel(X, Y+1, ptr_pixels))
     {
-        //paint_pixels(X, Y, ptr_pixels);
+        paint_pixels(X, Y, ptr_pixels);
         fill_spread(X, Y+1, imagem_X, imagem_Y, ptr_pixels);
     }
 
     else if(Y-1 >= 0 && checar_proxpixel(X, Y-1, ptr_pixels))
     {
-        //paint_pixels(X, Y, ptr_pixels);
+        paint_pixels(X, Y, ptr_pixels);
         fill_spread(X, Y-1, imagem_X, imagem_Y, ptr_pixels);
     }
 
     if(X+1 < imagem_X && checar_proxpixel(X+1, Y, ptr_pixels))
     {
-        //paint_pixels(X, Y, ptr_pixels);
+        paint_pixels(X, Y, ptr_pixels);
         fill_spread(X+1, Y, imagem_X, imagem_Y, ptr_pixels);
     }
 
     else if(X-1 >= 0 && checar_proxpixel(X-1, Y, ptr_pixels))
     {
-        //paint_pixels(X, Y, ptr_pixels);
+        paint_pixels(X, Y, ptr_pixels);
         fill_spread(X-1, Y, imagem_X, imagem_Y, ptr_pixels);
     }
+}
 
+void color_picker(int X, int Y, pixel ***ptr_pixels)
+{
+    pincel_fill.RGB.red = (*ptr_pixels)[X][Y].RGB.red;
+    pincel_fill.RGB.green = (*ptr_pixels)[X][Y].RGB.green;
+    pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 }
 
 void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
@@ -370,9 +382,7 @@ void fill(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     fscanf(arquivo, " %hu %hu\n", &X, &Y);
     checar_coordenadas(X, Y, ptr_desenho, "fill");
 
-    pincel_fill.RGB.red = (*ptr_pixels)[X][Y].RGB.red;
-    pincel_fill.RGB.green = (*ptr_pixels)[X][Y].RGB.green;
-    pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
+    color_picker(X, Y, ptr_pixels);
 
     fill_spread(X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
 }
@@ -446,10 +456,7 @@ void open(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
                     (*ptr_pixels)[i][j].RGB.green,
                     (*ptr_pixels)[i][j].RGB.blue,
                     "open");
-            printf("%d %d %d %d %d\n",
-                    i, j, (*ptr_pixels)[i][j].RGB.red,
-                    (*ptr_pixels)[i][j].RGB.green,
-                    (*ptr_pixels)[i][j].RGB.blue);
+            printf("%d %d %d %d %d\n", i, j, (*ptr_pixels)[i][j].RGB.red, (*ptr_pixels)[i][j].RGB.green, (*ptr_pixels)[i][j].RGB.blue);
         }
     }
 

@@ -24,17 +24,17 @@ int main()
 
     ptr_pixels = &pixels;
 
+    poligono = (poligonal*) malloc(3 * sizeof(poligono));
+    checar_mempoligono(poligono);
+
+    ptr_poligono = &poligono;
+
     checar_nome_input(ptr_input);
     arquivo_input = fopen(nome_input, "r");
     checar_fopen(arquivo_input);
 
     while(fscanf(arquivo_input,"%s", primitiva) != EOF)
     {
-        poligono = (poligonal*) malloc(3 * sizeof(poligono));
-        checar_mempoligono(poligono);
-
-        ptr_poligono = &poligono;
-
         switch(checar_primitiva(primitiva))
         {
             case primitive_image:
@@ -82,6 +82,7 @@ int main()
         free(pixels[i]);
     }
     free(pixels);
+    free(poligono);
     fclose(arquivo_input);
 
     return 0;

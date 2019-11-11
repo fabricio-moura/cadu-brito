@@ -65,9 +65,8 @@ void checar_resolucao(imagem *ptr_desenho)
     if(ptr_desenho->X < 1 || ptr_desenho->Y < 1 ||
         ptr_desenho->X > 4000 || ptr_desenho->Y > 4000)
     {
-        printf("%d %d\n", ptr_desenho->X, ptr_desenho->Y);
         printf("Resolução inválida! Insira uma resolução entre 1 e 4000.\n");
-        exit(-1);
+        exit(1);
     }
 }
 
