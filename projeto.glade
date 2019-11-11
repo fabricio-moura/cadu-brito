@@ -37,11 +37,43 @@
         <property name="can_focus">False</property>
         <child>
           <object class="GtkMenuBar" id="menu_bar">
-            <property name="width_request">506</property>
+            <property name="width_request">707</property>
             <property name="height_request">35</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="child_pack_direction">rtl</property>
+            <child>
+              <object class="GtkMenuItem">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Arquivo</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="button_new">
+                        <property name="label">gtk-new</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_button_new_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="button_open">
+                        <property name="label">gtk-open</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_button_open_activate" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
             <child>
               <object class="GtkMenuItem" id="button_save">
                 <property name="visible">True</property>
@@ -99,9 +131,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="x">201</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButtonBox">
@@ -290,17 +319,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFileChooserButton" id="file_open">
-            <property name="width_request">200</property>
-            <property name="height_request">34</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Comando open</property>
-            <property name="title" translatable="yes"/>
-            <signal name="file-set" handler="on_file_open_file_set" swapped="no"/>
-          </object>
-        </child>
-        <child>
           <object class="GtkSeparator">
             <property name="width_request">1</property>
             <property name="height_request">35</property>
@@ -323,7 +341,7 @@
       <placeholder/>
     </child>
     <child>
-      <object class="GtkFixed">
+      <object class="GtkFixed" id="fixed3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -338,6 +356,32 @@ ce foi projetada no Glade.
   Github:
 https://github.com/fabricio-moura/cadu-brito</property>
             <property name="selectable">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="window_open">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Abrindo</property>
+    <property name="resizable">False</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkFixed" id="fixed4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkEntry" id="file_open">
+            <property name="height_request">40</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="max_length">30</property>
+            <property name="activates_default">True</property>
+            <property name="width_chars">30</property>
+            <property name="placeholder_text" translatable="yes">Nome do arquivo</property>
+            <signal name="activate" handler="on_file_open_activate" swapped="no"/>
           </object>
         </child>
       </object>
