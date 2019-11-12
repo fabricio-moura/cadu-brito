@@ -343,27 +343,28 @@ void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal 
 
 void fill_spread(unsigned short X, unsigned short Y, unsigned short imagem_X, unsigned short imagem_Y, pixel ***ptr_pixels)
 {
+    paint_pixels(X, Y, ptr_pixels);
     if(Y+1 < imagem_Y && checar_proxpixel(X, Y+1, ptr_pixels))
     {
-        paint_pixels(X, Y, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
         fill_spread(X, Y+1, imagem_X, imagem_Y, ptr_pixels);
     }
 
-    else if(Y-1 >= 0 && checar_proxpixel(X, Y-1, ptr_pixels))
+    if(Y-1 >= 0 && checar_proxpixel(X, Y-1, ptr_pixels))
     {
-        paint_pixels(X, Y, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
         fill_spread(X, Y-1, imagem_X, imagem_Y, ptr_pixels);
     }
 
     if(X+1 < imagem_X && checar_proxpixel(X+1, Y, ptr_pixels))
     {
-        paint_pixels(X, Y, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
         fill_spread(X+1, Y, imagem_X, imagem_Y, ptr_pixels);
     }
 
-    else if(X-1 >= 0 && checar_proxpixel(X-1, Y, ptr_pixels))
+    if(X-1 >= 0 && checar_proxpixel(X-1, Y, ptr_pixels))
     {
-        paint_pixels(X, Y, ptr_pixels);
+        //paint_pixels(X, Y, ptr_pixels);
         fill_spread(X-1, Y, imagem_X, imagem_Y, ptr_pixels);
     }
 }
