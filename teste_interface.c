@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <stdio.h>
 
 GtkWidget	*window;
 GtkWidget 	*window_save;
@@ -21,6 +22,8 @@ GtkWidget	*button_resolution;
 GtkWidget 	*button_save;
 GtkWidget 	*button_open;
 GtkWidget 	*button_new;
+GtkWidget 	*button_undo;
+GtkWidget 	*button_redo;
 GtkWidget 	*save_name;
 GtkBuilder	*builder;
 
@@ -75,6 +78,56 @@ void on_button_new_activate()
 void on_button_save_activate()
 {
 	gtk_widget_show(window_save);
+}
+
+void on_button_undo_activate()
+{
+		FILE *arquivo;
+		int linha = 0;
+		char **historico;
+		int tamanho_linha;
+
+		historico = (char**) malloc(1*sizeof(char*));
+		historico[0] = (char*) malloc(1*sizeof(char));
+		arquivo = fopen("input.txt", "r+");
+		while(1)
+		{
+			fscanf(arquivo, "%*[^\n]s");
+			if(fgetc(arquivo) == EOF)
+			{
+				break;
+			}
+			linha++;
+		}
+		historico = (char**) realloc(historico, linha*sizeof(char*));
+		fseek(arquivo, 0, SEEK_SET);
+		printf("%d\n", linha);
+		for(int i = 0; i < linha-1; i++)
+		{
+			tamanho_linha = 0;
+			while(fgetc(arquivo) != '\n')
+			{
+				tamanho_linha++;
+			}
+			printf("%d\n", tamanho_linha);
+			printf("%d\n", i);
+			historico[i] = (char*) realloc(historico[i], tamanho_linha*sizeof(char));
+		}
+		fseek(arquivo, 0, SEEK_SET);
+		for(int i = 0; i < linha-1; i++)
+		{
+			fscanf(arquivo, "%[^\n]s", historico[i]);
+		}
+		for(int i = 0; i < linha-1; i++)
+		{
+			printf("%s\n", historico[i]);
+		}
+		fclose(arquivo);
+}
+
+void on_button_redo_activate()
+{
+
 }
 
 void save_name_activate_cb()
@@ -145,6 +198,8 @@ int main(int argc, char *argv[]) {
 	gtk_builder_add_callback_symbol(builder, "on_button_open_activate", on_button_open_activate);
 	gtk_builder_add_callback_symbol(builder, "on_file_open_activate", on_file_open_activate);
 	gtk_builder_add_callback_symbol(builder, "on_button_new_activate", on_button_new_activate);
+	gtk_builder_add_callback_symbol(builder, "on_button_undo_activate", on_button_undo_activate);
+	gtk_builder_add_callback_symbol(builder, "on_button_redo_activate", on_button_redo_activate);
 
     gtk_builder_connect_signals(builder, NULL);
 
@@ -165,6 +220,8 @@ int main(int argc, char *argv[]) {
 	button_save = GTK_WIDGET(gtk_builder_get_object(builder, "button_save"));
 	button_open = GTK_WIDGET(gtk_builder_get_object(builder, "button_open"));
 	button_new = GTK_WIDGET(gtk_builder_get_object(builder, "button_new"));
+	button_undo = GTK_WIDGET(gtk_builder_get_object(builder, "button_undo"));
+	button_redo = GTK_WIDGET(gtk_builder_get_object(builder, "button_redo"));
 	save_name = GTK_WIDGET(gtk_builder_get_object(builder, "save_name"));
 
 	gtk_widget_show(window);

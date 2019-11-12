@@ -29,15 +29,18 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Desenho Gráfico</property>
     <property name="window_position">center</property>
-    <property name="icon">palette.png</property>
+    <property name="icon">icons/palette.png</property>
     <property name="has_resize_grip">True</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkFixed" id="window_fixed">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
           <object class="GtkMenuBar" id="menu_bar">
-            <property name="width_request">707</property>
+            <property name="width_request">728</property>
             <property name="height_request">35</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -57,6 +60,7 @@
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_button_new_activate" swapped="no"/>
                       </object>
@@ -66,6 +70,7 @@
                         <property name="label">gtk-open</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_button_open_activate" swapped="no"/>
                       </object>
@@ -130,6 +135,26 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="GtkImageMenuItem" id="button_undo">
+                <property name="label">gtk-undo</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+                <signal name="activate" handler="on_button_undo_activate" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="button_redo">
+                <property name="label">gtk-redo</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+                <signal name="activate" handler="on_button_redo_activate" swapped="no"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -154,7 +179,7 @@
                     <property name="height_request">40</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">broom.png</property>
+                    <property name="pixbuf">icons/broom.png</property>
                     <property name="icon_size">3</property>
                   </object>
                 </child>
@@ -175,7 +200,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Comando rect</property>
-                    <property name="pixbuf">rectangle.png</property>
+                    <property name="pixbuf">icons/rectangle.png</property>
                   </object>
                 </child>
               </object>
@@ -195,7 +220,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Comando circle</property>
-                    <property name="pixbuf">circle.png</property>
+                    <property name="pixbuf">icons/circle.png</property>
                   </object>
                 </child>
               </object>
@@ -215,7 +240,7 @@
                   <object class="GtkImage">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">pentagon.png</property>
+                    <property name="pixbuf">icons/pentagon.png</property>
                   </object>
                 </child>
               </object>
@@ -235,7 +260,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Comando fill</property>
-                    <property name="pixbuf">fill.png</property>
+                    <property name="pixbuf">icons/fill.png</property>
                   </object>
                 </child>
               </object>
@@ -266,7 +291,7 @@
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="width_request">707</property>
+            <property name="width_request">728</property>
             <property name="height_request">6</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -305,9 +330,9 @@
               <object class="GtkEntry" id="basic_colors">
                 <property name="can_focus">False</property>
                 <property name="editable">False</property>
-                <property name="width_chars">25</property>
+                <property name="width_chars">28</property>
                 <property name="text" translatable="yes">branco (255, 255, 255)</property>
-                <property name="primary_icon_pixbuf">palette.png</property>
+                <property name="primary_icon_pixbuf">icons/palette.png</property>
                 <property name="secondary_icon_stock">gtk-discard</property>
                 <signal name="changed" handler="on_basic_colors_changed" swapped="no"/>
               </object>
@@ -316,17 +341,6 @@
           <packing>
             <property name="x">480</property>
             <property name="y">40</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="width_request">1</property>
-            <property name="height_request">35</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="x">200</property>
           </packing>
         </child>
       </object>
@@ -390,6 +404,10 @@ https://github.com/fabricio-moura/cadu-brito</property>
   <object class="GtkWindow" id="window_save">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Salvando</property>
+    <property name="resizable">False</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkFixed" id="fixed2">
         <property name="visible">True</property>
