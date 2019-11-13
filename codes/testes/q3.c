@@ -22,7 +22,7 @@ int main(){
 	
 	maior_pos(vet, &maior, &posicao);
 
-	printf("%d %d\n", maior, posicao+1);
+	printf("%d %d\n", maior, posicao);
 	
 	return 0;
 }
