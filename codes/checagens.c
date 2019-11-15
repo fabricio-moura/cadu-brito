@@ -158,3 +158,51 @@ void checar_pontos(poligonal **ptr_poligono)
         exit(1);
     }
 }
+
+void checar_medidas(int largura, int altura, int X, int Y, imagem *ptr_desenho)
+{
+    if(largura > ptr_desenho->Y || largura < 1)
+    {
+        printf("Largura do retângulo inválida.\n");
+        exit(1);
+    }
+    else if(altura > ptr_desenho->X || altura < 1)
+    {
+        printf("Altura do retângulo inválida.\n");
+        exit(1);
+    }
+    else if(largura + Y > ptr_desenho->Y - 1)
+    {
+        printf("Largura maior que o desenho.\n");
+        exit(1);
+    }
+    else if(altura + X > ptr_desenho->X - 1)
+    {
+        printf("Altura maior que o desenho.\n");
+        exit(1);
+    }
+}
+
+void checar_raio(imagem *ptr_desenho)
+{
+    if(circulo.X + circulo.tamanho > ptr_desenho->X - 1)
+    {
+        printf("Circulo passando da imagem embaixo.\n");
+        exit(1);
+    }
+    else if(circulo.X - circulo.tamanho < 0)
+    {
+        printf("Circulo passando da imagem em cima.\n");
+        exit(1);
+    }
+    else if(circulo.Y + circulo.tamanho > ptr_desenho->Y - 1)
+    {
+        printf("Circulo passando da imagem pela direita.\n");
+        exit(1);
+    }
+    else if(circulo.Y - circulo.tamanho < 0)
+    {
+        printf("Circulo passando da imagem pela esquerda.\n");
+        exit(1);
+    }
+}

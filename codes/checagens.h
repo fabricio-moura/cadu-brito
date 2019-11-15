@@ -19,5 +19,7 @@ void checar_coordenadas(int X, int Y, imagem *ptr_desenho, char *comando);
 int checar_proxpixel(int X, int Y, pixel ***ptr_pixels);
 void checar_cor(int red, int green, int blue, char *comando);
 void checar_pontos(poligonal **ptr_poligono);
+void checar_medidas(int largura, int altura, int X, int Y, imagem *ptr_desenho);
+void checar_raio(imagem *ptr_desenho);
 
 #endif

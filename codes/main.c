@@ -53,11 +53,12 @@ int main()
                 break;
             case primitive_circle:
                 circle(arquivo_input, ptr_desenho, ptr_pixels);
-                printf("Circulo X Y Tam %d %d %d\n", circulo.X, circulo.Y, circulo.tamanho);
+                printf("Circulo X Y Tam %d %d %d\n", circulo.Y, circulo.X, circulo.tamanho);
                 break;
             case primitive_polygon:
                 polygon(arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
                 printf("Poligono com %d pontos\n", poligono->pontos);
+                free(poligono);
                 break;
             case primitive_fill:
                 fill(arquivo_input, ptr_desenho, ptr_pixels );
