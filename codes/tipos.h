@@ -12,26 +12,26 @@ typedef struct
 {
     unsigned short X;
     unsigned short Y;
-} imagem;
+    cor RGB;
+} pixel;
 
 typedef struct
 {
     unsigned short X;
     unsigned short Y;
-    cor RGB;
-} pixel;
+} imagem;
+
+typedef struct
+{
+    int X;
+    int Y;
+    int pontos;
+} poligonal;
 
 struct paint
 {
     cor RGB;
 } pincel, pincel_fill;
-
-struct circle
-{
-    int X;
-    int Y;
-    int tamanho;
-} circulo;
 
 struct line
 {
@@ -40,11 +40,11 @@ struct line
     int decisao;
 } linha;
 
-typedef struct
+struct circle
 {
     int X;
     int Y;
-    int pontos;
-} poligonal;
+    int tamanho;
+} circulo;
 
 #endif

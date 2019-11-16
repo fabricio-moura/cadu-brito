@@ -42,27 +42,28 @@ int main()
                 break;
             case primitive_color:
                 color(arquivo_input);
-                printf("Color setada para %d %d %d\n", pincel.RGB.red, pincel.RGB.green,
+                printf("Cor %d %d %d.\n", pincel.RGB.red, pincel.RGB.green,
                         pincel.RGB.blue);
                 break;
             case primitive_clear:
                 clear(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
             case primitive_rect:
-                rect(arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
+                rect(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
             case primitive_circle:
                 circle(arquivo_input, ptr_desenho, ptr_pixels);
-                printf("Circulo X Y Tam %d %d %d\n", circulo.Y, circulo.X, circulo.tamanho);
+                printf("Circulo %d %d Raio %d.\n", circulo.Y, circulo.X,
+                        circulo.tamanho);
                 break;
             case primitive_polygon:
                 polygon(arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
-                printf("Poligono com %d pontos\n", poligono->pontos);
-                free(poligono);
+                printf("Poligono com %d pontos.\n", poligono->pontos);
+                //free(poligono);
                 break;
             case primitive_fill:
                 fill(arquivo_input, ptr_desenho, ptr_pixels );
-                printf("Pintando tudo de %d %d %d\n", pincel.RGB.red, pincel.RGB.green,
+                printf("Fill %d %d %d.\n", pincel.RGB.red, pincel.RGB.green,
                         pincel.RGB.blue);
                 break;
             case primitive_save:
@@ -72,7 +73,7 @@ int main()
                 open(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
             default:
-                printf("Primitiva inválida\n");
+                printf("Primitiva inválida.\n");
                 exit(1);
         }
     }

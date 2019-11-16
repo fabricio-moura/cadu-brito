@@ -1,5 +1,53 @@
 #include "checagens.h"
 
+void checar_mempixel(pixel **pixels, int counter)
+{
+    if(counter == -1)
+    {
+        if(pixels == NULL)
+        {
+            printf ("Erro! Memória Insuficiente.\n");
+            exit(1);
+        }
+    }
+    else
+    {
+        if(pixels[counter] == NULL)
+        {
+            printf("Erro! Memória Insuficiente.\n");
+            exit(1);
+        }
+    }
+}
+
+void checar_mempoligono(poligonal *poligono)
+{
+    if(poligono == NULL)
+    {
+        printf ("Erro! Memória Insuficiente.\n");
+        exit(1);
+    }
+}
+
+void checar_fopen(FILE *arquivo)
+{
+    if(arquivo == NULL)
+    {
+        printf("Erro ao abrir arquivo!\n");
+        exit(1);
+    }
+}
+
+void checar_nome_input(char *ptr_input)
+{
+    printf("Insira o nome do arquivo .txt ou o digito '0' para padrão: ");
+    scanf("%s", ptr_input);
+    if(strcmp(ptr_input, "0") == 0)
+    {
+        strcpy(ptr_input, "input.txt");
+    }
+}
+
 int checar_primitiva(char *primitiva)
 {
     if(strcmp(primitiva, "image") == 0)
@@ -51,15 +99,6 @@ void checar_formato(char *formato)
     }
 }
 
-void checar_qualidade(int qualidade)
-{
-    if(qualidade != 255)
-    {
-        printf("Qualidade inválida. Abra um arquivo com qualidade 255.\n");
-        exit(1);
-    }
-}
-
 void checar_resolucao(imagem *ptr_desenho)
 {
     if(ptr_desenho->X < 1 || ptr_desenho->Y < 1 ||
@@ -70,59 +109,22 @@ void checar_resolucao(imagem *ptr_desenho)
     }
 }
 
-void checar_mempixel(pixel **pixels, int counter)
+void checar_qualidade(int qualidade)
 {
-    if(counter == -1)
+    if(qualidade != 255)
     {
-        if(pixels == NULL)
-        {
-            printf ("Erro! Memória Insuficiente\n");
-            exit(1);
-        }
-    }
-    else
-    {
-        if(pixels[counter] == NULL)
-        {
-            printf("Erro! Memória Insuficiente\n");
-            exit(1);
-        }
-    }
-}
-
-void checar_mempoligono(poligonal *poligono)
-{
-    if(poligono == NULL)
-    {
-        printf ("Erro! Memória Insuficiente\n");
+        printf("Qualidade inválida. Abra um arquivo com qualidade 255.\n");
         exit(1);
     }
 }
 
-void checar_fopen(FILE *arquivo)
+void checar_cor(int red, int green, int blue, char *comando)
 {
-    if(arquivo == NULL)
+    if( red > 255 || red < 0
+        || green > 255 || green < 0
+        || blue > 255 || blue < 0)
     {
-        printf("Erro ao abrir arquivo!\n");
-        exit(1);
-    }
-}
-
-void checar_nome_input(char *ptr_input)
-{
-    printf("Insira o nome do arquivo txt ou 0 para default: ");
-    scanf("%s", ptr_input);
-    if(strcmp(ptr_input, "0") == 0)
-    {
-        strcpy(ptr_input, "input.txt");
-    }
-}
-
-void checar_coordenadas(int X, int Y, imagem *ptr_desenho, char *comando)
-{
-    if(X < 0 || Y < 0 || X > ptr_desenho->X-1 || Y > ptr_desenho->Y-1)
-    {
-        printf("Posição de coordenada do comando %s inválida.\n", comando);
+        printf("Cor inválida no comando %s.\n", comando);
         exit(1);
     }
 }
@@ -139,22 +141,11 @@ int checar_proxpixel(int X, int Y, pixel ***ptr_pixels)
     return 1;
 }
 
-void checar_cor(int red, int green, int blue, char *comando)
+void checar_coordenadas(int X, int Y, imagem *ptr_desenho, char *comando)
 {
-    if( red > 255 || red < 0
-        || green > 255 || green < 0
-        || blue > 255 || blue < 0)
+    if(X < 0 || Y < 0 || X > ptr_desenho->X-1 || Y > ptr_desenho->Y-1)
     {
-        printf("Cor inválida no comando %s.\n", comando);
-        exit(1);
-    }
-}
-
-void checar_pontos(poligonal **ptr_poligono)
-{
-    if((*ptr_poligono)->pontos < 3)
-    {
-        printf("Quantidade de pontos inválida.\n");
+        printf("Posição de coordenada do comando %s inválida.\n", comando);
         exit(1);
     }
 }
@@ -179,6 +170,15 @@ void checar_medidas(int largura, int altura, int X, int Y, imagem *ptr_desenho)
     else if(altura + X > ptr_desenho->X - 1)
     {
         printf("Altura maior que o desenho.\n");
+        exit(1);
+    }
+}
+
+void checar_pontos(poligonal **ptr_poligono)
+{
+    if((*ptr_poligono)->pontos < 3)
+    {
+        printf("Quantidade de pontos inválida.\n");
         exit(1);
     }
 }
