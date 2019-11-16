@@ -17,12 +17,16 @@ enum primitivas
     primitive_polygon,
     primitive_fill,
     primitive_save,
-    primitive_open
+    primitive_open,
+    primitive_compress,
+    primitive_decompress
 };
 
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void open(FILE *arquivo_input,imagem *ptr_desenho,  pixel ***ptr_pixels);
 void save(FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels);
+void compress (FILE *arquivo_input);
+void decompress(FILE *arquivo_input);
 
 void color(FILE *arquivo);
 void paint_pixels(int eixo_x, int eixo_y, pixel ***ptr_pixels);

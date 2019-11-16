@@ -28,8 +28,8 @@ void open (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     FILE *input_imagem;
     char nome_imagem[30];
-    int qualidade;
     char formato[3];
+    int qualidade;
 
     fscanf (arquivo_input, "%s", nome_imagem);
     input_imagem = fopen (nome_imagem, "r");
@@ -101,6 +101,93 @@ void save (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
     fclose (arquivo_imagem);
 }
 
+void compress (FILE *arquivo_input)
+{
+    FILE *imagem, *comprimido;
+    int X, Y;
+    int red, green, blue;
+    int red_atual, green_atual, blue_atual;
+    int counter = 0;
+    int qualidade;
+    char formato[3];
+    char nome_imagem[30];
+
+    fscanf (arquivo_input, " %s", nome_imagem);
+    imagem = fopen (nome_imagem, "r");
+    checar_fopen (imagem);
+    comprimido = fopen ("comprimido.txt", "w");
+    checar_fopen (comprimido);
+
+    fscanf (imagem,"%s\n%d %d\n%d\n", formato, &Y, &X, &qualidade);
+    checar_formato (formato);
+    checar_qualidade (qualidade);
+    fprintf (comprimido, "P3 %d %d 255", Y, X);
+
+    fscanf (imagem, "%d %d %d", &red, &green, &blue);
+    red_atual = red;
+    green_atual = green;
+    blue_atual = blue;
+
+    while (1)
+    {
+        if (red != red_atual
+            || green != green_atual
+            || blue != blue_atual)
+        {
+            fprintf (comprimido, ", %d %d %d %d",
+                    counter, red_atual, green_atual, blue_atual);
+            red_atual = red;
+            green_atual = green;
+            blue_atual = blue;
+            counter = 1;
+        }
+        else
+        {
+            counter++;
+        }
+
+        if (fscanf (imagem, "%d %d %d", &red, &green, &blue) == EOF)
+        {
+            fprintf (comprimido, ", %d %d %d %d",
+                   counter, red_atual, green_atual, blue_atual);
+            break;
+        }
+    }
+}
+
+void decompress(FILE *arquivo_input)
+{
+    FILE *comprimido, *descomprimido;
+    int X, Y;
+    int red, green, blue;
+    int qualidade;
+    int counter = 0;
+    char nome_comprimido[30], nome_descomprimido[30];
+    char formato[3];
+
+    fscanf (arquivo_input, " %s", nome_comprimido);
+    comprimido = fopen (nome_comprimido, "r");
+    checar_fopen (comprimido);
+
+    fscanf (arquivo_input, " %s", nome_descomprimido);
+    descomprimido = fopen (nome_descomprimido, "w");
+    checar_fopen (descomprimido);
+
+    fscanf (comprimido, "%s %d %d %d", formato, &Y, &X, &qualidade);
+    checar_formato (formato);
+    checar_qualidade (qualidade);
+
+    fprintf(descomprimido, "P3\n%d %d\n255\n", Y, X);
+
+    while(fscanf(comprimido, ", %d %d %d %d", &counter, &red, &green, &blue) != EOF)
+    {
+        for(int i = 0; i < counter; i++)
+        {
+            fprintf(descomprimido, "%d %d %d\n", red, green, blue);
+        }
+    }
+}
+
 void color (FILE *arquivo)
 {
     fscanf (arquivo, " %hhu %hhu %hhu\n",
@@ -155,8 +242,6 @@ void fill (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 
     fill_spread_right (X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
     fill_spread_left (X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
-    //fill_spread_up (X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
-    //fill_spread_down (X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
 }
 
 void fill_spread_right (

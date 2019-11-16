@@ -29,12 +29,15 @@ int main()
 
     ptr_poligono = &poligono;
 
+    desenho.X = 0;
+
     checar_nome_input(ptr_input);
     arquivo_input = fopen(nome_input, "r");
     checar_fopen(arquivo_input);
 
     while(fscanf(arquivo_input,"%s", primitiva) != EOF)
     {
+        printf("%s\n", primitiva);
         switch(checar_primitiva(primitiva))
         {
             case primitive_image:
@@ -72,12 +75,17 @@ int main()
             case primitive_open:
                 open(arquivo_input, ptr_desenho, ptr_pixels);
                 break;
+            case primitive_compress:
+                compress(arquivo_input);
+                break;
+            case primitive_decompress:
+                decompress(arquivo_input);
+                break;
             default:
                 printf("Primitiva inválida.\n");
                 exit(1);
         }
     }
-
     for(int i = 0; i < desenho.X; i++)
     {
         free(pixels[i]);

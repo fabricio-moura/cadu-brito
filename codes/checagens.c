@@ -86,6 +86,14 @@ int checar_primitiva(char *primitiva)
     {
         return primitive_open;
     }
+    else if(strcmp(primitiva, "compress") == 0)
+    {
+        return primitive_compress;
+    }
+    else if(strcmp(primitiva, "decompress") == 0)
+    {
+        return primitive_decompress;
+    }
 
     return -1;
 }
