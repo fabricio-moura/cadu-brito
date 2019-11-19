@@ -115,7 +115,9 @@ void compress (FILE *arquivo_input)
     fscanf (arquivo_input, " %s", nome_imagem);
     imagem = fopen (nome_imagem, "r");
     checar_fopen (imagem);
-    comprimido = fopen ("comprimido.txt", "w");
+    sscanf (nome_imagem, "%[^.]s", nome_imagem);
+    strcat (nome_imagem, ".txt");
+    comprimido = fopen (nome_imagem, "w");
     checar_fopen (comprimido);
 
     fscanf (imagem,"%s\n%d %d\n%d\n", formato, &Y, &X, &qualidade);
@@ -153,6 +155,7 @@ void compress (FILE *arquivo_input)
             break;
         }
     }
+    printf ("Imagem comprimida para \"%s\".\n", nome_imagem);
 }
 
 void decompress(FILE *arquivo_input)
@@ -168,6 +171,9 @@ void decompress(FILE *arquivo_input)
     fscanf (arquivo_input, " %s", nome_comprimido);
     comprimido = fopen (nome_comprimido, "r");
     checar_fopen (comprimido);
+
+    sscanf (nome_comprimido, "%[^.]s", nome_descomprimido);
+    strcat (nome_descomprimido, ".ppm");
 
     fscanf (arquivo_input, " %s", nome_descomprimido);
     descomprimido = fopen (nome_descomprimido, "w");
@@ -428,7 +434,7 @@ void line_dy (
     {
         if (x_final == x || y_final == y)
         {
-            printf ("oi");
+            //printf ("oi");
             line_straight (x_final, y_final, x, y, ptr_pixels);
         }
         else if (linha.decisao < 0 && x_final > x)

@@ -37,7 +37,6 @@ int main()
 
     while(fscanf(arquivo_input,"%s", primitiva) != EOF)
     {
-        printf("%s\n", primitiva);
         switch(checar_primitiva(primitiva))
         {
             case primitive_image:
