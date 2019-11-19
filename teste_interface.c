@@ -1,11 +1,12 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 GtkWidget	*window;
 GtkWidget 	*window_save;
 GtkWidget 	*window_about;
 GtkWidget 	*window_open;
-GtkWidget	*fixed1;
+GtkWidget	*window_fixed;
 GtkWidget 	*fixed2;
 GtkWidget 	*fixed3;
 GtkWidget 	*fixed4;
@@ -25,6 +26,7 @@ GtkWidget 	*button_new;
 GtkWidget 	*button_undo;
 GtkWidget 	*button_redo;
 GtkWidget 	*save_name;
+GtkWidget 	*image1;
 GtkBuilder	*builder;
 
 void on_button_clean_clicked()
@@ -132,8 +134,15 @@ void on_button_redo_activate()
 
 void save_name_activate_cb()
 {
+	char filename[] = "issoai.ppm";
+	image1 = gtk_image_new_from_file (filename);
 	printf("activate\n");
 	gtk_widget_hide(window_save);
+	if (image1)
+		gtk_container_remove (GTK_CONTAINER (window_fixed), image1);
+	gtk_container_add (GTK_CONTAINER (window_fixed), image1);
+	gtk_widget_show(image1);
+	gtk_fixed_move (GTK_FIXED (window_fixed), image1, 59, 93);
 }
 
 void on_file_open_activate()
@@ -203,7 +212,7 @@ int main(int argc, char *argv[]) {
 
     gtk_builder_connect_signals(builder, NULL);
 
-	fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
+	window_fixed = GTK_WIDGET(gtk_builder_get_object(builder, "window_fixed"));
 	fixed2 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed2"));
 	fixed3 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed3"));
 	fixed4 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed4"));
@@ -223,8 +232,11 @@ int main(int argc, char *argv[]) {
 	button_undo = GTK_WIDGET(gtk_builder_get_object(builder, "button_undo"));
 	button_redo = GTK_WIDGET(gtk_builder_get_object(builder, "button_redo"));
 	save_name = GTK_WIDGET(gtk_builder_get_object(builder, "save_name"));
+	image1 = GTK_WIDGET(gtk_builder_get_object(builder, "image1"));
 
 	gtk_widget_show(window);
+
+	image1 = NULL;
 
 	gtk_main();
 
