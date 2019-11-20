@@ -40,8 +40,8 @@ void fill_spread_left(unsigned short X, unsigned short Y, unsigned short imagem_
 
 void line(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels);
 void line_straight(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels);
-void line_dx(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels);
-void line_dy(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels);
+void line_y(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels);
+void line_x(int x_final, int y_final, int x_inicial, int y_inicial, pixel ***ptr_pixels);
 
 void rect(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
 void polygon(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels, poligonal **ptr_poligono);

@@ -192,6 +192,7 @@ void decompress(FILE *arquivo_input)
             fprintf(descomprimido, "%d %d %d\n", red, green, blue);
         }
     }
+    printf ("Imagem descomprimida para \"%s\".\n", nome_descomprimido);
 }
 
 void color (FILE *arquivo)
@@ -305,6 +306,7 @@ void fill_spread_left (
     }
 }
 
+// https://riptutorial.com/algorithm/example/25012/bresenham-line-drawing-algorithm
 void line (
     int x_final,
     int y_final,
@@ -322,20 +324,19 @@ void line (
     //printf("dx %d dy %d\n", linha.dx, linha.dy);
     if (linha.dy == 0 || linha.dx == 0) inclinacao = 1;
     //printf("inc %f\n", inclinacao);
-    if (inclinacao >= 1 || inclinacao <= -1)
-    {
-        //printf ("dx\n");
-        line_dx (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
-    }
-    else if (inclinacao == 1 && (x_inicial == x_final || y_inicial == y_final))
+    if (x_inicial == x_final || y_inicial == y_final)
     {
         line_straight (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
     }
-    else if ((inclinacao < 1 && inclinacao > 0)
-            || (inclinacao < 0 && inclinacao > -1))
+    else if (inclinacao >= 1 || inclinacao <= -1)
+    {
+        //printf ("dx\n");
+        line_y (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
+    }
+    else if (inclinacao < 1 && inclinacao > -1)
     {
         //printf("dy\n");
-        line_dy (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
+        line_x (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
     }
 
 }
@@ -370,7 +371,7 @@ void line_straight (
     }
 }
 
-void line_dx (
+void line_y (
     int x_final,
     int y_final,
     int x,
@@ -379,48 +380,50 @@ void line_dx (
 {
     paint_pixels (x, y, ptr_pixels);
     //printf ("de %d %d para %d %d\n", x, y, x_final, y_final);
-    if (x != x_final || y_final != y)
+    if (x != x_final || y != y_final)
     {
         //printf ("dec %d\n", linha.decisao);
-        if (x_final == x || y_final == y)
+        if (x == x_final || y == y_final)
         {
             //printf ("oi");
             line_straight (x_final, y_final, x, y, ptr_pixels);
         }
-        else if (linha.decisao < 0 && y_final > y)
+        else if (linha.decisao < 0)
         {
             linha.decisao += 2 * linha.dx;
-            line_dx (x_final, y_final, x, y+1, ptr_pixels);
+            if (y_final > y)
+            {
+                line_y (x_final, y_final, x, y+1, ptr_pixels);
+            }
+            else if (y_final < y)
+            {
+                line_y (x_final, y_final, x, y-1, ptr_pixels);
+            }
         }
-        else if (linha.decisao < 0 && y_final < y)
-        {
-            linha.decisao += 2 * linha.dx;
-            line_dx (x_final, y_final, x, y-1, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final > x && y_final > y)
-        {
-            linha.decisao += 2*linha.dx - 2*linha.dy;
-            line_dx (x_final, y_final, x+1, y+1, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final < x && y_final < y)
+        else
         {
             linha.decisao += 2*linha.dx - 2*linha.dy;
-            line_dx (x_final, y_final, x-1, y-1, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final < x && y_final > y)
-        {
-            linha.decisao += 2*linha.dx - 2*linha.dy;
-            line_dx (x_final, y_final, x-1, y+1, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final > x && y_final < y)
-        {
-            linha.decisao += 2*linha.dx - 2*linha.dy;
-            line_dx (x_final, y_final, x+1, y-1, ptr_pixels);
+            if (x_final > x && y_final > y)
+            {
+                line_y (x_final, y_final, x+1, y+1, ptr_pixels);
+            }
+            else if (x_final < x && y_final < y)
+            {
+                line_y (x_final, y_final, x-1, y-1, ptr_pixels);
+            }
+            else if (x_final < x && y_final > y)
+            {
+                line_y (x_final, y_final, x-1, y+1, ptr_pixels);
+            }
+            else if (x_final > x && y_final < y)
+            {
+                line_y (x_final, y_final, x+1, y-1, ptr_pixels);
+            }
         }
     }
 }
 
-void line_dy (
+void line_x (
     int x_final,
     int y_final,
     int x,
@@ -437,35 +440,37 @@ void line_dy (
             //printf ("oi");
             line_straight (x_final, y_final, x, y, ptr_pixels);
         }
-        else if (linha.decisao < 0 && x_final > x)
+        else if (linha.decisao < 0)
         {
             linha.decisao += 2 * linha.dy;
-            line_dy (x_final, y_final, x+1, y, ptr_pixels);
+            if (x_final > x)
+            {
+                line_x (x_final, y_final, x+1, y, ptr_pixels);
+            }
+            else if (x_final < x)
+            {
+                line_x (x_final, y_final, x-1, y, ptr_pixels);
+            }
         }
-        else if (linha.decisao < 0 && x_final < x)
-        {
-            linha.decisao += 2 * linha.dy;
-            line_dy (x_final, y_final, x-1, y, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final > x && y_final > y)
-        {
-            linha.decisao += 2*linha.dy - 2*linha.dx;
-            line_dy (x_final, y_final, x+1, y+1, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final < x && y_final < y)
+        else
         {
             linha.decisao += 2*linha.dy - 2*linha.dx;
-            line_dy (x_final, y_final, x-1, y-1, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final < x && y_final > y)
-        {
-            linha.decisao += 2*linha.dy - 2*linha.dx;
-            line_dy (x_final, y_final, x-1, y+1, ptr_pixels);
-        }
-        else if (linha.decisao >= 0 && x_final > x && y_final < y)
-        {
-            linha.decisao += 2*linha.dy - 2*linha.dx;
-            line_dy (x_final, y_final, x+1, y-1, ptr_pixels);
+            if (x_final > x && y_final > y)
+            {
+                line_x (x_final, y_final, x+1, y+1, ptr_pixels);
+            }
+            else if (x_final < x && y_final < y)
+            {
+                line_x (x_final, y_final, x-1, y-1, ptr_pixels);
+            }
+            else if (x_final < x && y_final > y)
+            {
+                line_x (x_final, y_final, x-1, y+1, ptr_pixels);
+            }
+            else if (x_final > x && y_final < y)
+            {
+                line_x (x_final, y_final, x+1, y-1, ptr_pixels);
+            }
         }
     }
 }
@@ -486,7 +491,9 @@ void rect (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
         line_straight (X + altura, Y, X + altura, Y + largura, ptr_pixels);
         line_straight (X, Y, X + altura, Y, ptr_pixels);
     }
-    else if (X + altura > ptr_desenho->X && Y + largura < ptr_desenho->Y)
+    else if (X + altura > ptr_desenho->X
+            && Y + largura < ptr_desenho->Y
+            && X - altura >= 0)
     {
         line_straight (X, Y + largura, X, Y, ptr_pixels);
         line_straight (X - altura, Y + largura, X, Y + largura, ptr_pixels);
@@ -503,7 +510,9 @@ void rect (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
         line_straight (X - altura, Y, X - altura, Y - largura, ptr_pixels);
         line_straight (X, Y, X - altura, Y, ptr_pixels);
     }
-    else if (X + altura < ptr_desenho->X && Y + largura > ptr_desenho->Y)
+    else if (X + altura < ptr_desenho->X
+            && Y + largura > ptr_desenho->Y
+            && Y - largura >= 0)
     {
         line_straight (X, Y - largura, X, Y, ptr_pixels);
         line_straight (X + altura, Y - largura, X, Y - largura, ptr_pixels);
@@ -513,6 +522,7 @@ void rect (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     else
     {
         printf ("Retângulo saindo do desenho.\n");
+        exit(1);
     }
 
     printf ("Retângulo %d %d Largura %d Altura %d.\n", X, Y, largura, altura);
