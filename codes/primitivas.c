@@ -98,6 +98,7 @@ void save (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
     }
 
     printf ("Imagem salva com nome \"%s\".\n", nome_imagem);
+
     fclose (arquivo_imagem);
 }
 
@@ -115,14 +116,17 @@ void compress (FILE *arquivo_input)
     fscanf (arquivo_input, " %s", nome_imagem);
     imagem = fopen (nome_imagem, "r");
     checar_fopen (imagem);
+
     sscanf (nome_imagem, "%[^.]s", nome_imagem);
     strcat (nome_imagem, ".txt");
+
     comprimido = fopen (nome_imagem, "w");
     checar_fopen (comprimido);
 
     fscanf (imagem,"%s\n%d %d\n%d\n", formato, &Y, &X, &qualidade);
     checar_formato (formato);
     checar_qualidade (qualidade);
+
     fprintf (comprimido, "P3 %d %d 255", Y, X);
 
     fscanf (imagem, "%d %d %d", &red, &green, &blue);
@@ -151,10 +155,11 @@ void compress (FILE *arquivo_input)
         if (fscanf (imagem, "%d %d %d", &red, &green, &blue) == EOF)
         {
             fprintf (comprimido, ", %d %d %d %d",
-                   counter, red_atual, green_atual, blue_atual);
+                    counter, red_atual, green_atual, blue_atual);
             break;
         }
     }
+
     printf ("Imagem comprimida para \"%s\".\n", nome_imagem);
 }
 
@@ -192,6 +197,7 @@ void decompress(FILE *arquivo_input)
             fprintf(descomprimido, "%d %d %d\n", red, green, blue);
         }
     }
+
     printf ("Imagem descomprimida para \"%s\".\n", nome_descomprimido);
 }
 
@@ -202,6 +208,9 @@ void color (FILE *arquivo)
             &pincel.RGB.green,
             &pincel.RGB.blue);
     checar_cor (pincel.RGB.red, pincel.RGB.green, pincel.RGB.blue, "color");
+
+    printf ("Cor %d %d %d.\n", pincel.RGB.red, pincel.RGB.green,
+            pincel.RGB.blue);
 }
 
 void paint_pixels (int eixo_x, int eixo_y, pixel ***ptr_pixels)
@@ -249,6 +258,9 @@ void fill (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 
     fill_spread_right (X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
     fill_spread_left (X, Y, ptr_desenho->X, ptr_desenho->Y, ptr_pixels);
+
+    printf ("Fill %d %d %d.\n", pincel.RGB.red, pincel.RGB.green,
+            pincel.RGB.blue);
 }
 
 void fill_spread_right (
@@ -320,10 +332,13 @@ void line (
 
     linha.dx = abs (x_final - x_inicial);
     linha.dy = abs (y_final - y_inicial);
-    linha.decisao = 2*linha.dy - linha.dx;
     //printf("dx %d dy %d\n", linha.dx, linha.dy);
+
+    linha.decisao = 2*linha.dy - linha.dx;
+    
     if (linha.dy == 0 || linha.dx == 0) inclinacao = 1;
     //printf("inc %f\n", inclinacao);
+
     if (x_inicial == x_final || y_inicial == y_final)
     {
         line_straight (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
@@ -352,19 +367,19 @@ void line_straight (
     //printf("de %d %d para %d %d\n", x, y, x_final, y_final);
     if (x != x_final || y != y_final)
     {
-        if (x_final > x)
+        if (x < x_final)
         {
             line_straight (x_final, y_final, x+1, y, ptr_pixels);
         }
-        else if (y_final > y)
+        else if (y < y_final)
         {
             line_straight (x_final, y_final, x, y+1, ptr_pixels);
         }
-        else if (x_final < x)
+        else if (x > x_final)
         {
             line_straight (x_final, y_final, x-1, y, ptr_pixels);
         }
-        else if (y_final < y)
+        else if (y > y_final)
         {
             line_straight (x_final, y_final, x, y-1, ptr_pixels);
         }
@@ -391,11 +406,11 @@ void line_y (
         else if (linha.decisao < 0)
         {
             linha.decisao += 2 * linha.dx;
-            if (y_final > y)
+            if (y < y_final)
             {
                 line_y (x_final, y_final, x, y+1, ptr_pixels);
             }
-            else if (y_final < y)
+            else if (y > y_final)
             {
                 line_y (x_final, y_final, x, y-1, ptr_pixels);
             }
@@ -403,19 +418,19 @@ void line_y (
         else
         {
             linha.decisao += 2*linha.dx - 2*linha.dy;
-            if (x_final > x && y_final > y)
+            if (x < x_final && y < y_final)
             {
                 line_y (x_final, y_final, x+1, y+1, ptr_pixels);
             }
-            else if (x_final < x && y_final < y)
+            else if (x > x_final && y > y_final)
             {
                 line_y (x_final, y_final, x-1, y-1, ptr_pixels);
             }
-            else if (x_final < x && y_final > y)
+            else if (x > x_final && y < y_final)
             {
                 line_y (x_final, y_final, x-1, y+1, ptr_pixels);
             }
-            else if (x_final > x && y_final < y)
+            else if (x < x_final && y > y_final)
             {
                 line_y (x_final, y_final, x+1, y-1, ptr_pixels);
             }
@@ -443,11 +458,11 @@ void line_x (
         else if (linha.decisao < 0)
         {
             linha.decisao += 2 * linha.dy;
-            if (x_final > x)
+            if (x < x_final)
             {
                 line_x (x_final, y_final, x+1, y, ptr_pixels);
             }
-            else if (x_final < x)
+            else if (x > x_final)
             {
                 line_x (x_final, y_final, x-1, y, ptr_pixels);
             }
@@ -455,19 +470,19 @@ void line_x (
         else
         {
             linha.decisao += 2*linha.dy - 2*linha.dx;
-            if (x_final > x && y_final > y)
+            if (x < x_final && y < y_final)
             {
                 line_x (x_final, y_final, x+1, y+1, ptr_pixels);
             }
-            else if (x_final < x && y_final < y)
+            else if (x > x_final && y > y_final)
             {
                 line_x (x_final, y_final, x-1, y-1, ptr_pixels);
             }
-            else if (x_final < x && y_final > y)
+            else if (x > x_final && y < y_final)
             {
                 line_x (x_final, y_final, x-1, y+1, ptr_pixels);
             }
-            else if (x_final > x && y_final < y)
+            else if (x < x_final && y > y_final)
             {
                 line_x (x_final, y_final, x+1, y-1, ptr_pixels);
             }
@@ -522,7 +537,7 @@ void rect (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     else
     {
         printf ("Retângulo saindo do desenho.\n");
-        exit(1);
+        exit (1);
     }
 
     printf ("Retângulo %d %d Largura %d Altura %d.\n", X, Y, largura, altura);
@@ -568,10 +583,12 @@ void polygon (
             ptr_pixels);
 
         *ptr_poligono = (poligonal*) realloc (
-                                        *ptr_poligono,
-                                        i * sizeof (poligonal));
+                                            *ptr_poligono,
+                                            i * sizeof (poligonal));
         checar_mempoligono (*ptr_poligono);
     }
+
+    printf ("Poligono com %d pontos.\n", (*ptr_poligono)->pontos);
 }
 
 void circle (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
@@ -581,6 +598,9 @@ void circle (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     checar_raio (ptr_desenho);
 
     circle_line (0, circulo.tamanho, 3 - (2 * circulo.tamanho), ptr_pixels);
+
+    printf ("Circulo %d %d Raio %d.\n", circulo.Y, circulo.X,
+            circulo.tamanho);
 }
 
 // Algoritmo de Bresenham copiado.

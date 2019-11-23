@@ -17,81 +17,75 @@ int main()
     poligonal *poligono;
     poligonal **ptr_poligono;
 
-    pixels = (pixel**) malloc(1*sizeof(pixel*));
+    pixels = (pixel**) malloc (1 * sizeof (pixel*));
     checar_mempixel(pixels, -1);
-    pixels[0] = (pixel*) malloc(1*sizeof(pixel));
-    checar_mempixel(pixels, 0);
+    pixels[0] = (pixel*) malloc (1 * sizeof (pixel));
+    checar_mempixel (pixels, 0);
 
     ptr_pixels = &pixels;
 
-    poligono = (poligonal*) malloc(3 * sizeof(poligono));
-    checar_mempoligono(poligono);
+    poligono = (poligonal*) malloc (3 * sizeof (poligono));
+    checar_mempoligono (poligono);
 
     ptr_poligono = &poligono;
 
     desenho.X = 0;
 
-    checar_nome_input(ptr_input);
-    arquivo_input = fopen(nome_input, "r");
-    checar_fopen(arquivo_input);
+    checar_nome_input (ptr_input);
+    arquivo_input = fopen (nome_input, "r");
+    checar_fopen (arquivo_input);
 
-    while(fscanf(arquivo_input,"%s", primitiva) != EOF)
+    while (fscanf (arquivo_input,"%s", primitiva) != EOF)
     {
-        switch(checar_primitiva(primitiva))
+        switch (checar_primitiva (primitiva))
         {
             case primitive_image:
-                image(arquivo_input, ptr_desenho, ptr_pixels);
-                break;
-            case primitive_color:
-                color(arquivo_input);
-                printf("Cor %d %d %d.\n", pincel.RGB.red, pincel.RGB.green,
-                        pincel.RGB.blue);
-                break;
-            case primitive_clear:
-                clear(arquivo_input, ptr_desenho, ptr_pixels);
-                break;
-            case primitive_rect:
-                rect(arquivo_input, ptr_desenho, ptr_pixels);
-                break;
-            case primitive_circle:
-                circle(arquivo_input, ptr_desenho, ptr_pixels);
-                printf("Circulo %d %d Raio %d.\n", circulo.Y, circulo.X,
-                        circulo.tamanho);
-                break;
-            case primitive_polygon:
-                polygon(arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
-                printf("Poligono com %d pontos.\n", poligono->pontos);
-                //free(poligono);
-                break;
-            case primitive_fill:
-                fill(arquivo_input, ptr_desenho, ptr_pixels );
-                printf("Fill %d %d %d.\n", pincel.RGB.red, pincel.RGB.green,
-                        pincel.RGB.blue);
-                break;
-            case primitive_save:
-                save(arquivo_input, ptr_desenho, ptr_pixels);
+                image (arquivo_input, ptr_desenho, ptr_pixels);
                 break;
             case primitive_open:
-                open(arquivo_input, ptr_desenho, ptr_pixels);
+                open (arquivo_input, ptr_desenho, ptr_pixels);
+                break;
+            case primitive_save:
+                save (arquivo_input, ptr_desenho, ptr_pixels);
                 break;
             case primitive_compress:
-                compress(arquivo_input);
+                compress (arquivo_input);
                 break;
             case primitive_decompress:
-                decompress(arquivo_input);
+                decompress (arquivo_input);
                 break;
+            case primitive_color:
+                color (arquivo_input);
+                break;
+            case primitive_clear:
+                clear (arquivo_input, ptr_desenho, ptr_pixels);
+                break;
+            case primitive_fill:
+                fill (arquivo_input, ptr_desenho, ptr_pixels );
+                break;
+            case primitive_rect:
+                rect (arquivo_input, ptr_desenho, ptr_pixels);
+                break;
+            case primitive_polygon:
+                polygon (arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
+                //free(poligono);
+                break;
+            case primitive_circle:
+                circle (arquivo_input, ptr_desenho, ptr_pixels);
+                break; 
             default:
-                printf("Primitiva inválida.\n");
-                exit(1);
+                printf ("Primitiva inválida.\n");
+                exit (1);
         }
     }
-    for(int i = 0; i < desenho.X; i++)
+    
+    for (int i = 0; i < desenho.X; i++)
     {
-        free(pixels[i]);
+        free (pixels[i]);
     }
-    free(pixels);
-    free(poligono);
-    fclose(arquivo_input);
+    free (pixels);
+    free (poligono);
+    fclose (arquivo_input);
 
     return 0;
 }

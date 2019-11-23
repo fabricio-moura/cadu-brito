@@ -11,16 +11,16 @@
 enum primitivas
 {
     primitive_image,
+    primitive_open,
+    primitive_save,
+    primitive_compress,
+    primitive_decompress,
     primitive_color,
     primitive_clear,
+    primitive_fill,     
     primitive_rect,
-    primitive_circle,
     primitive_polygon,
-    primitive_fill,
-    primitive_save,
-    primitive_open,
-    primitive_compress,
-    primitive_decompress
+    primitive_circle
 };
 
 void image(FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels);
