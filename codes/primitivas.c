@@ -583,8 +583,8 @@ void polygon (
             ptr_pixels);
 
         *ptr_poligono = (poligonal*) realloc (
-                                            *ptr_poligono,
-                                            i * sizeof (poligonal));
+                                        *ptr_poligono,
+                                        i * sizeof (poligonal));
         checar_mempoligono (*ptr_poligono);
     }
 
