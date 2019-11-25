@@ -7,6 +7,7 @@ GtkWidget 	*window_save;
 GtkWidget 	*window_about;
 GtkWidget 	*window_open;
 GtkWidget	*window_fixed;
+GtkWidget 	*window_new;
 GtkWidget 	*fixed2;
 GtkWidget 	*fixed3;
 GtkWidget 	*fixed4;
@@ -25,6 +26,7 @@ GtkWidget 	*button_open;
 GtkWidget 	*button_new;
 GtkWidget 	*button_undo;
 GtkWidget 	*button_redo;
+GtkWidget	*button_create;
 GtkWidget 	*save_name;
 GtkWidget 	*image1;
 GtkBuilder	*builder;
@@ -75,6 +77,12 @@ void on_button_resolution_activate()
 void on_button_new_activate()
 {
 	printf("novinho\n");
+	gtk_widget_show(window_new);
+}
+
+void on_button_create_activate()
+{
+	gtk_widget_hide(window_new);
 }
 
 void on_button_save_activate()
@@ -189,6 +197,7 @@ int main(int argc, char *argv[]) {
 	window_save = GTK_WIDGET(gtk_builder_get_object(builder, "window_save"));
 	window_about = GTK_WIDGET(gtk_builder_get_object(builder, "window_about"));
 	window_open = GTK_WIDGET(gtk_builder_get_object(builder, "window_open"));
+	window_new = GTK_WIDGET(gtk_builder_get_object(builder, "window_new"));
 
 	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
@@ -209,6 +218,7 @@ int main(int argc, char *argv[]) {
 	gtk_builder_add_callback_symbol(builder, "on_button_new_activate", on_button_new_activate);
 	gtk_builder_add_callback_symbol(builder, "on_button_undo_activate", on_button_undo_activate);
 	gtk_builder_add_callback_symbol(builder, "on_button_redo_activate", on_button_redo_activate);
+	gtk_builder_add_callback_symbol(builder, "on_button_create_activate", on_button_create_activate);
 
     gtk_builder_connect_signals(builder, NULL);
 
@@ -231,6 +241,7 @@ int main(int argc, char *argv[]) {
 	button_new = GTK_WIDGET(gtk_builder_get_object(builder, "button_new"));
 	button_undo = GTK_WIDGET(gtk_builder_get_object(builder, "button_undo"));
 	button_redo = GTK_WIDGET(gtk_builder_get_object(builder, "button_redo"));
+	button_create = GTK_WIDGET(gtk_builder_get_object(builder, "button_create"));
 	save_name = GTK_WIDGET(gtk_builder_get_object(builder, "save_name"));
 	image1 = GTK_WIDGET(gtk_builder_get_object(builder, "image1"));
 
