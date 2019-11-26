@@ -29,3 +29,16 @@ O que foi feito e as funções responsáveis (presentes em primitivas.c):
 * Compressão e descompressão de imagem;
   * compress
   * decompress
+  
+O que não foi feito:
+
+
+
+O que seria feito diferentemente:
+
+
+
+Como compilar e rodar o projeto:
+* Execute o comando `make all` no terminal aberto na pasta com todos os 7 arquivos modularizados;
+* (Opcional) Após executar o comando `make all`, execute o comando `make clean` para deletar os arquivos .o desnecessários;
+* Será produzido um arquivo chamado `projeto`, execute-o no terminal.
