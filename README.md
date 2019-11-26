@@ -5,3 +5,27 @@ Esse projeto é um trabalho realizado para compor a nota da referida unidade par
 * Antonio Higino Bisneto Leite
 * Fabrício Moura Jácome
 
+O que foi feito e as funções responsáveis (presentes em primitivas.c):
+* Criação dos tipos de dados necessários (typedef, structs e enums);
+* Modularização do programa;
+* Leitura do arquivo de especificação;
+* Geração de uma imagem  PPM;
+  * image
+  * save
+* Desenho de retas;
+  * line
+  * line_straight
+  * line_x
+  * line_y
+* Desenho de polígonos;
+  * polygon
+* Desenho de circúlos;
+  * circle
+  * circle_line
+* Preenchimento de cores;
+  * fill
+  * fill_spread_left
+  * fill_spread_right
+* Compressão e descompressão de imagem;
+  * compress
+  * decompress
