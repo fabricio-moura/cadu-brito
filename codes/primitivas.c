@@ -335,7 +335,7 @@ void line (
     //printf("dx %d dy %d\n", linha.dx, linha.dy);
 
     linha.decisao = 2*linha.dy - linha.dx;
-    
+
     if (linha.dy == 0 || linha.dx == 0) inclinacao = 1;
     //printf("inc %f\n", inclinacao);
 
@@ -597,13 +597,13 @@ void circle (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     checar_coordenadas (circulo.X, circulo.Y, ptr_desenho, "circle");
     checar_raio (ptr_desenho);
 
-    circle_line (0, circulo.tamanho, 3 - (2 * circulo.tamanho), ptr_pixels);
+    circle_line (0, circulo.tamanho, 3-(2*circulo.tamanho), ptr_pixels);
 
     printf ("Circulo %d %d Raio %d.\n", circulo.Y, circulo.X,
             circulo.tamanho);
 }
 
-// Algoritmo de Bresenham copiado.
+// https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 void circle_line (int x, int y, int decisao, pixel ***ptr_pixels)
 {
     if (y >= x)

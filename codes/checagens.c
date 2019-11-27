@@ -95,7 +95,7 @@ int checar_primitiva (char *primitiva)
     {
         return primitive_circle;
     }
-    
+
     return -1;
 }
 
@@ -110,7 +110,7 @@ void checar_formato (char *formato)
 
 void checar_resolucao (imagem *ptr_desenho)
 {
-    if (ptr_desenho->X < 1 || ptr_desenho->Y < 1 
+    if (ptr_desenho->X < 1 || ptr_desenho->Y < 1
         || ptr_desenho->X > 4000 || ptr_desenho->Y > 4000)
     {
         printf ("Resolução inválida! Insira uma resolução entre 1 e 4000.\n");
