@@ -1,5 +1,7 @@
 #include "checagens.h"
 
+// Recebe um vetor da matriz pixels alocada dinamicamente, um contador
+// e encerra o programa caso o vetor seja nulo.
 void checar_mempixel (pixel **pixels, int counter)
 {
     if (counter == -1)
@@ -20,6 +22,8 @@ void checar_mempixel (pixel **pixels, int counter)
     }
 }
 
+// Recebe um vetor poligono alocado dinamicamente e encerra o programa
+// caso ele seja nulo. 
 void checar_mempoligono (poligonal *poligono)
 {
     if (poligono == NULL)
@@ -29,6 +33,7 @@ void checar_mempoligono (poligonal *poligono)
     }
 }
 
+// Recebe uma stream arquivo e encerra o programa caso seja nula.
 void checar_fopen (FILE *arquivo)
 {
     if (arquivo == NULL)
@@ -38,6 +43,8 @@ void checar_fopen (FILE *arquivo)
     }
 }
 
+// Recebe o ponteiro ptr_input e lê do usuário o nome do arquivo .txt que 
+// será utilizado para leitura dos comandos.
 void checar_nome_input (char *ptr_input)
 {
     printf ("Insira o nome do arquivo .txt ou o digito '0' para padrão: ");
@@ -49,6 +56,8 @@ void checar_nome_input (char *ptr_input)
     }
 }
 
+// Recebe uma string primitiva contendo o comando lido do arquivo .txt e
+// retorna o resultado da análise.
 int checar_primitiva (char *primitiva)
 {
     if (strcmp (primitiva, "image") == 0)
@@ -99,6 +108,7 @@ int checar_primitiva (char *primitiva)
     return -1;
 }
 
+// Recebe uma string formato e encerra o programa em caso de invalidez.
 void checar_formato (char *formato)
 {
     if (strcmp (formato, "P3") != 0)
@@ -108,6 +118,8 @@ void checar_formato (char *formato)
     }
 }
 
+// Recebe um ponteiro struct ptr_desenho contendo a resolução do desenho e
+// encerra o programa em caso de invalidez.
 void checar_resolucao (imagem *ptr_desenho)
 {
     if (ptr_desenho->X < 1 || ptr_desenho->Y < 1
@@ -118,6 +130,7 @@ void checar_resolucao (imagem *ptr_desenho)
     }
 }
 
+// Recebe um inteiro qualidade e encerra o programa em caso de invalidez.
 void checar_qualidade(int qualidade)
 {
     if (qualidade != 255)
@@ -127,6 +140,8 @@ void checar_qualidade(int qualidade)
     }
 }
 
+// Recebe inteiros red, green, blue representando uma cor, uma string comando 
+// contendo o nome da primitiva utilizada e encerra o programa caso a cor seja inválida.
 void checar_cor (int red, int green, int blue, char *comando)
 {
     if ( red > 255 || red < 0
@@ -138,6 +153,9 @@ void checar_cor (int red, int green, int blue, char *comando)
     }
 }
 
+// Recebe uma coordenada dos inteiros X e Y, um ponteiro de uma matriz de pixels
+// alocada dinamicamente e checa se a cor do pixel dessa coordenada na matriz é 
+// diferente da cor do pincel_fill.
 int checar_proxpixel (int X, int Y, pixel ***ptr_pixels)
 {
     if ((*ptr_pixels)[X][Y].RGB.red != pincel_fill.RGB.red
@@ -150,6 +168,9 @@ int checar_proxpixel (int X, int Y, pixel ***ptr_pixels)
     return 1;
 }
 
+// Recebe uma coordenada dos inteiros X e Y, um ponteiro struct ptr_desenho contendo 
+// a resolução do desenho, uma string com o nome do comando utilizado e verifica se
+// a coordenada está dentro da resolução do desenho.
 void checar_coordenadas (int X, int Y, imagem *ptr_desenho, char *comando)
 {
     if (X < 0 || Y < 0 || X > ptr_desenho->X-1 || Y > ptr_desenho->Y-1)
@@ -159,6 +180,9 @@ void checar_coordenadas (int X, int Y, imagem *ptr_desenho, char *comando)
     }
 }
 
+// Recebe uma coordenadas dos inteiros X e Y, as medidas dos inteiros largura e altura,
+// um ponteiro struct ptr_desenho contendo a resolução do desenho e encerra o programa
+// caso o retângulo não caiba na imagem.
 void checar_medidas (int largura, int altura, int X, int Y, imagem *ptr_desenho)
 {
     if (largura >= ptr_desenho->Y || largura < 1)
@@ -173,6 +197,8 @@ void checar_medidas (int largura, int altura, int X, int Y, imagem *ptr_desenho)
     }
 }
 
+// Recebe um ponteiro ptr_poligono do vetor poligono alocado dinamicamente e encerra o 
+// programa caso a quantidade de pontos seja inválida.
 void checar_pontos (poligonal **ptr_poligono)
 {
     if ((*ptr_poligono)->pontos < 3)
@@ -182,6 +208,8 @@ void checar_pontos (poligonal **ptr_poligono)
     }
 }
 
+// Recebe um ponteiro struct ptr_desenho contendo a resolução do desenho e encerra o 
+// programa caso o circulo não caiba na imagem.
 void checar_raio (imagem *ptr_desenho)
 {
     if (circulo.X + circulo.tamanho > ptr_desenho->X - 1)
