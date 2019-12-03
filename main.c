@@ -68,17 +68,16 @@ int main()
                 break;
             case primitive_polygon:
                 polygon (arquivo_input, ptr_desenho, ptr_pixels, ptr_poligono);
-                //free(poligono);
                 break;
             case primitive_circle:
                 circle (arquivo_input, ptr_desenho, ptr_pixels);
-                break; 
+                break;
             default:
                 printf ("Primitiva inválida.\n");
                 exit (1);
         }
     }
-    
+
     for (int i = 0; i < desenho.X; i++)
     {
         free (pixels[i]);

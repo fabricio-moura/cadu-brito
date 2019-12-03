@@ -1,6 +1,6 @@
 #include "primitivas.h"
 
-// Recebe um ponteiro struct contendo a resolução do desenho, 
+// Recebe um ponteiro struct contendo a resolução do desenho,
 // um ponteiro de uma matriz de pixels alocada dinamicamente e
 // ajusta o tamanho da matriz para a resolução lida.
 void image (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
@@ -27,8 +27,8 @@ void image (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
             ptr_desenho->Y, ptr_desenho->X);
 }
 
-// Recebe um ponteiro struct contendo a resolução do desenho, um ponteiro de 
-// uma matriz de pixels alocada dinamicamente, ajusta o tamanho da matriz 
+// Recebe um ponteiro struct contendo a resolução do desenho, um ponteiro de
+// uma matriz de pixels alocada dinamicamente, ajusta o tamanho da matriz
 // para a resolução lida e copia a cor dos pixels lidos para a matriz.
 void open (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
@@ -75,15 +75,14 @@ void open (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
                     (*ptr_pixels)[i][j].RGB.green,
                     (*ptr_pixels)[i][j].RGB.blue,
                     "open");
-            //printf("%d %d %d %d %d\n", i, j, (*ptr_pixels)[i][j].RGB.red, (*ptr_pixels)[i][j].RGB.green, (*ptr_pixels)[i][j].RGB.blue);
         }
     }
 
     fclose (input_imagem);
 }
 
-// Recebe um ponteiro struct contendo a resolução do desenho, um ponteiro de 
-// uma matriz de pixels alocada dinamicamente, e escreve em um arquivo as
+// Recebe um ponteiro struct contendo a resolução do desenho, um ponteiro de
+// uma matriz de pixels alocada dinamicamente e escreve em um arquivo as
 // informações do desenho.
 void save (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
@@ -227,7 +226,7 @@ void color (FILE *arquivo)
             pincel.RGB.blue);
 }
 
-// Pinta o pixel da coordenada recebida com a cor do pincel.
+// Pinta o pixel na coordenada recebida com a cor do pincel.
 void paint_pixels (int eixo_x, int eixo_y, pixel ***ptr_pixels)
 {
     (*ptr_pixels)[eixo_x][eixo_y].RGB.red = pincel.RGB.red;
@@ -235,8 +234,7 @@ void paint_pixels (int eixo_x, int eixo_y, pixel ***ptr_pixels)
     (*ptr_pixels)[eixo_x][eixo_y].RGB.blue = pincel.RGB.blue;
 }
 
-// Lê a cor do pixel da coordenada recebida e armazena no pincel da função
-// fill.
+// Lê a cor do pixel na coordenada recebida e armazena no pincel da função fill.
 void color_picker (int X, int Y, pixel ***ptr_pixels)
 {
     pincel_fill.RGB.red = (*ptr_pixels)[X][Y].RGB.red;
@@ -244,7 +242,7 @@ void color_picker (int X, int Y, pixel ***ptr_pixels)
     pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 }
 
-// Pinta todos os pixels da imagem da cor atual do pincel.
+// Pinta todos os pixels da imagem com a cor inserida no comando.
 void clear (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     int red, green, blue;
@@ -265,8 +263,8 @@ void clear (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     printf ("Tudo limpo na cor %d %d %d.\n", red, green, blue);
 }
 
-// Pinta a partir de um ponto na cor do pincel fill até não conseguir mais
-// achar pixels com a cor do pixel inicial pelo método de spread.
+// Pinta a partir de um ponto com a cor do pincel fill , atráves do método de
+// spread, até não conseguir mais encontrar pixels da cor do pixel inicial.
 void fill (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     unsigned short X, Y;
@@ -283,7 +281,7 @@ void fill (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
             pincel.RGB.blue);
 }
 
-// Método de spread da função fill. Só se espalha na vertical e para direita.
+// Método de spread da função fill. Apenas se espalha na vertical e para direita.
 void fill_spread_right (
     unsigned short X,
     unsigned short Y,
@@ -309,6 +307,8 @@ void fill_spread_right (
     }
 }
 
+// Método de spread da função fill. Espalha-se na vertical, para a esquerda e
+// invoca o outro spread para complementar a direção que falta.
 void fill_spread_left (
     unsigned short X,
     unsigned short Y,
@@ -339,7 +339,9 @@ void fill_spread_left (
     }
 }
 
-// https://riptutorial.com/algorithm/example/25012/bresenham-line-drawing-algorithm
+// Rip Tutorial - Bresenham Line Drawing: https://bit.ly/2sHI3yk
+// Calcula, a partir das coordenadas recebidas, parâmetros de decisão e analisa
+// qual subfunção irá chamar para traçar uma linha.
 void line (
     int x_final,
     int y_final,
@@ -353,12 +355,10 @@ void line (
 
     linha.dx = abs (x_final - x_inicial);
     linha.dy = abs (y_final - y_inicial);
-    //printf("dx %d dy %d\n", linha.dx, linha.dy);
 
     linha.decisao = 2*linha.dy - linha.dx;
 
     if (linha.dy == 0 || linha.dx == 0) inclinacao = 1;
-    //printf("inc %f\n", inclinacao);
 
     if (x_inicial == x_final || y_inicial == y_final)
     {
@@ -366,17 +366,16 @@ void line (
     }
     else if (inclinacao >= 1 || inclinacao <= -1)
     {
-        //printf ("dx\n");
         line_y (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
     }
     else if (inclinacao < 1 && inclinacao > -1)
     {
-        //printf("dy\n");
         line_x (x_final, y_final, x_inicial, y_inicial, ptr_pixels);
     }
 
 }
 
+// Traça uma linha entre pontos no mesmo eixo.
 void line_straight (
     int x_final,
     int y_final,
@@ -385,7 +384,7 @@ void line_straight (
     pixel ***ptr_pixels)
 {
     paint_pixels (x, y, ptr_pixels);
-    //printf("de %d %d para %d %d\n", x, y, x_final, y_final);
+
     if (x != x_final || y != y_final)
     {
         if (x < x_final)
@@ -407,6 +406,7 @@ void line_straight (
     }
 }
 
+// Traça uma linha na qual o maior deslocamento será no eixo y (largura).
 void line_y (
     int x_final,
     int y_final,
@@ -415,13 +415,11 @@ void line_y (
     pixel ***ptr_pixels)
 {
     paint_pixels (x, y, ptr_pixels);
-    //printf ("de %d %d para %d %d\n", x, y, x_final, y_final);
+
     if (x != x_final || y != y_final)
     {
-        //printf ("dec %d\n", linha.decisao);
         if (x == x_final || y == y_final)
         {
-            //printf ("oi");
             line_straight (x_final, y_final, x, y, ptr_pixels);
         }
         else if (linha.decisao < 0)
@@ -459,6 +457,7 @@ void line_y (
     }
 }
 
+// Traça uma linha na qual o maior deslocamento será no eixo x (altura).
 void line_x (
     int x_final,
     int y_final,
@@ -467,13 +466,11 @@ void line_x (
     pixel ***ptr_pixels)
 {
     paint_pixels (x, y, ptr_pixels);
-    //printf ("de %d %d para %d %d\n", x, y, x_final, y_final);
-    //printf ("decisao %d\n", linha.decisao);
+
     if (x != x_final || y_final != y)
     {
         if (x_final == x || y_final == y)
         {
-            //printf ("oi");
             line_straight (x_final, y_final, x, y, ptr_pixels);
         }
         else if (linha.decisao < 0)
@@ -511,6 +508,8 @@ void line_x (
     }
 }
 
+// Desenha um retângulo, rotacionando no eixo do ponto inicial em sentido
+// horário para tentar caber no desenho.
 void rect (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     int X, Y;
@@ -564,6 +563,8 @@ void rect (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     printf ("Retângulo %d %d Largura %d Altura %d.\n", X, Y, largura, altura);
 }
 
+// Desenha um polígono traçando retas entre os pontos fornecidos pelo usuário na
+// ordem em que foram inseridos.
 void polygon (
     FILE *arquivo,
     imagem *ptr_desenho,
@@ -586,7 +587,6 @@ void polygon (
                         (*ptr_poligono)[i].X,
                         (*ptr_poligono)[i].Y,
                         ptr_desenho, "polygon");
-                        //printf("%d %d\n", (*ptr_poligono)[i].Y, (*ptr_poligono)[i].X);
         if (i == (*ptr_poligono)->pontos)
         {
             (*ptr_poligono)[0].Y = (*ptr_poligono)[i].Y;
@@ -596,7 +596,6 @@ void polygon (
 
     for (int i = (*ptr_poligono)->pontos; i > 0; i--)
     {
-        //printf("Final %d %d Inicial %d %d\n",(*ptr_poligono)[i-1].X, (*ptr_poligono)[i-1].Y, (*ptr_poligono)[i].X, (*ptr_poligono)[i].Y);
         line ((*ptr_poligono)[i-1].X,
             (*ptr_poligono)[i-1].Y,
             (*ptr_poligono)[i].X,
@@ -612,6 +611,8 @@ void polygon (
     printf ("Poligono com %d pontos.\n", (*ptr_poligono)->pontos);
 }
 
+// Lê no arquivo o ponto inicial e o raio e chama uma subfunção, enviando
+// alguns parâmetros de decisão, para desenhar o círculo.
 void circle (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     fscanf (arquivo, " %d %d %d\n", &circulo.Y, &circulo.X, &circulo.tamanho);
@@ -624,7 +625,9 @@ void circle (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
             circulo.tamanho);
 }
 
-// https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
+// Geeks for Geeks - Bresenham’s circle drawing: https://bit.ly/2P9YQBD
+// Traça um octante do circulo ao mesmo tempo que vai pintando oito pixels por
+// chamada de função.
 void circle_line (int x, int y, int decisao, pixel ***ptr_pixels)
 {
     if (y >= x)
