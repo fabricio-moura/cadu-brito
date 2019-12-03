@@ -1,5 +1,8 @@
 #include "primitivas.h"
 
+// Recebe um ponteiro struct contendo a resolução do desenho, 
+// um ponteiro de uma matriz de pixels alocada dinamicamente e
+// ajusta o tamanho da matriz para a resolução lida.
 void image (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     fscanf (arquivo, " %hu %hu\n", &ptr_desenho->Y, &ptr_desenho->X);
@@ -24,6 +27,9 @@ void image (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
             ptr_desenho->Y, ptr_desenho->X);
 }
 
+// Recebe um ponteiro struct contendo a resolução do desenho, um ponteiro de 
+// uma matriz de pixels alocada dinamicamente, ajusta o tamanho da matriz 
+// para a resolução lida e copia a cor dos pixels lidos para a matriz.
 void open (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     FILE *input_imagem;
@@ -76,6 +82,9 @@ void open (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
     fclose (input_imagem);
 }
 
+// Recebe um ponteiro struct contendo a resolução do desenho, um ponteiro de 
+// uma matriz de pixels alocada dinamicamente, e escreve em um arquivo as
+// informações do desenho.
 void save (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     FILE *arquivo_imagem;
@@ -102,6 +111,8 @@ void save (FILE *arquivo_input, imagem *ptr_desenho, pixel ***ptr_pixels)
     fclose (arquivo_imagem);
 }
 
+// Lê as informações de uma imagem e comprime as linhas de cores que se
+// repetem em sequência.
 void compress (FILE *arquivo_input)
 {
     FILE *imagem, *comprimido;
@@ -163,6 +174,8 @@ void compress (FILE *arquivo_input)
     printf ("Imagem comprimida para \"%s\".\n", nome_imagem);
 }
 
+// Lê a compressão realizada pela função compress e gera uma imagem
+// reconhecível pelo formato.
 void decompress(FILE *arquivo_input)
 {
     FILE *comprimido, *descomprimido;
@@ -201,6 +214,7 @@ void decompress(FILE *arquivo_input)
     printf ("Imagem descomprimida para \"%s\".\n", nome_descomprimido);
 }
 
+// Lê uma cor do arquivo de entrada e armazena no pincel.
 void color (FILE *arquivo)
 {
     fscanf (arquivo, " %hhu %hhu %hhu\n",
@@ -213,6 +227,7 @@ void color (FILE *arquivo)
             pincel.RGB.blue);
 }
 
+// Pinta o pixel da coordenada recebida com a cor do pincel.
 void paint_pixels (int eixo_x, int eixo_y, pixel ***ptr_pixels)
 {
     (*ptr_pixels)[eixo_x][eixo_y].RGB.red = pincel.RGB.red;
@@ -220,6 +235,8 @@ void paint_pixels (int eixo_x, int eixo_y, pixel ***ptr_pixels)
     (*ptr_pixels)[eixo_x][eixo_y].RGB.blue = pincel.RGB.blue;
 }
 
+// Lê a cor do pixel da coordenada recebida e armazena no pincel da função
+// fill.
 void color_picker (int X, int Y, pixel ***ptr_pixels)
 {
     pincel_fill.RGB.red = (*ptr_pixels)[X][Y].RGB.red;
@@ -227,6 +244,7 @@ void color_picker (int X, int Y, pixel ***ptr_pixels)
     pincel_fill.RGB.blue = (*ptr_pixels)[X][Y].RGB.blue;
 }
 
+// Pinta todos os pixels da imagem da cor atual do pincel.
 void clear (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     int red, green, blue;
@@ -247,6 +265,8 @@ void clear (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
     printf ("Tudo limpo na cor %d %d %d.\n", red, green, blue);
 }
 
+// Pinta a partir de um ponto na cor do pincel fill até não conseguir mais
+// achar pixels com a cor do pixel inicial pelo método de spread.
 void fill (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
 {
     unsigned short X, Y;
@@ -263,6 +283,7 @@ void fill (FILE *arquivo, imagem *ptr_desenho, pixel ***ptr_pixels)
             pincel.RGB.blue);
 }
 
+// Método de spread da função fill. Só se espalha na vertical e para direita.
 void fill_spread_right (
     unsigned short X,
     unsigned short Y,
