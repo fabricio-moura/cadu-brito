@@ -34,8 +34,12 @@ O que foi feito e as funções responsáveis (presentes em primitivas.c):
   > Lê do arquivo os valores correspondentes ao RGB e copia essa cor por meio loops para cada pixel da matriz do desenho.
 * Preenchimento de cores;
   * fill
-  * fill_spread_left
+  > Lê do arquivo input uma coordenada no desenho, usa a função color_picker nesse ponto para saber qual cor pintar e chama as funções de spread para iniciar o preenchimento.
   * fill_spread_right
+  > Pinta o pixel que recebeu como parâmetro e verifica se os três pixels acima, a direita e abaixo estão dentro do desenho e se são da cor do pincel_fill. Caso forem, continua a recursão se invocando para cada uma das verificações.
+  * fill_spread_left
+  > É um complemento da fill_spread_right, pintando o pixel que recebeu como parâmetro, mas verificando se os três pixels acima, a esquerda e abaixo estão dentro do desenho e se chamando. Porém, para preencher todas as lacunas, essa função também verifica para a direita, mas é a última verificação e a fill_spread_left é chamada depois, sendo que, nessa verificação, ela invoca a fill_spread_right. 
+###### Essa divisão de fill_spread foi feita porque uma função só verificando para todas as direções estava causando stack overflow. Dessa forma que foi realizada, além de diminuir as chamadas de uma mesma função, a função que faria mais verificações é chamada por último, então ela necessariamente realiza menos trabalho, e ela invoca a outra função para o seu complemento.
 * Compressão e descompressão de imagem;
   * compress
   > É lido o nome da imagem a ser comprimida e, com esse mesmo nome, é retirada a "extensão" .ppm, inserida a .txt e então aberto um arquivo com esse nome no modo escrita. Da imagem a ser comprimida é lida a resolução e verificados o formato e qualidade e então é printado no arquivo essas informações. Em seguida é lida a cor na primeira linha da imagem e inseridas nas variáveis red, green, blue, red_atual, green_atual, blue_atual e começa um loop. Nesse loop é verificado se a cor (red, green, blue) é diferente da cor atual, se for, é imprimido no arquivo comprimido o contador (quantas vezes a cor atual foi lida) e a cor atual, e também a cor lida vira a cor atual e o contador volta para 1. Além dessa verificação, é verificado se a leitura `fscanf (imagem, "%d %d %d", &red, &green, &blue)  == EOF`, isso faz com que as cores da imagem sejam lidas até os pixels acabarem e, como não tem como comparar a ultima cor, quando chegar no final do arquivo imagem é imprimido no arquivo comprimido o contador e a cor dessa ultima.
@@ -57,4 +61,4 @@ ___
 | Integrantes      | Atribuições |
 | ----------- | ----------- |
 | Antonio Higino Bisneto Leite Medeiros      | Lógica, Documentação      |
-| Fabrício Moura Jácome   | Lógica, Coding    |
+| Fabrício Moura Jácome   | Lógica, Coding, Documentação    |
