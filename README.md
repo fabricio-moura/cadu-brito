@@ -15,9 +15,13 @@ O que foi feito e as funções responsáveis (presentes em primitivas.c):
   > É lido o nome do arquivo que irá ser gerado e nele é inserido o formato (P3), a qualidade (255), que são fixos, e a resolução, que está presente nas variáveis ptr_desenho->Y e ptr_desenho->X. Então é escrito em cada linha do arquivo a cor de cada pixel, caracterizando uma imagem reconhecível pelo formato.
 * Desenho de retas;
   * line
+  > Calcula a inclinação a partir da razão entre o delta y e o delta x, calcula um parâmetro de decisão com base no valor absoluto do delta y e do delta x e considera a inclinação como 1 caso o delta y ou o delta x tenha valor 0 para evitar cálculos impossíveis. Então, dependendo do valor da inclinação, uma das três subfunções de line é chamada para traçar a reta.
   * line_straight
+  > Pinta o pixel na coordenada recebida no parâmetro e, baseado no valor do x e do y final e inicial, ele realiza uma recursão e se invoca incrementando ou decrementando o valor do y ou do x.
   * line_x
+  > Pinta o pixel na coordenada recebida no parâmetro e, se o x ou o y forem diferentes do valor final, ele verifica se algum dos dois é igual, nesse caso chamando a função line_straight, se não, ele analisa a variável de decisão e a incrementa baseada em alguns cálculos, realizando uma recursão e se invocando e, dependendo da decisão tomada e da relação entre o x e o y final e inicial, ele incrementa e/ou decrementa o x e/ou y. A diferença em relação ao line_x é que quando ele só altera um dos eixos, ele só altera o x.
   * line_y
+  > Pinta o pixel na coordenada recebida no parâmetro e, se o x ou o y forem diferentes do valor final, ele verifica se algum dos dois é igual, nesse caso chamando a função line_straight, se não, ele analisa a variável de decisão e a incrementa baseada em alguns cálculos, realizando uma recursão e se invocando e, dependendo da decisão tomada e da relação entre o x e o y final e inicial, ele incrementa e/ou decrementa o x e/ou y. A diferença em relação ao line_x é que quando ele só altera um dos eixos, ele só altera o y.
 * Desenho de polígonos;
   * polygon
 * Desenho de circúlos;
