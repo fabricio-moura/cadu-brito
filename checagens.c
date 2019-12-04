@@ -9,15 +9,15 @@ void checar_mempixel (pixel **pixels, int counter)
         if (pixels == NULL)
         {
             printf ("Erro! Memória Insuficiente.\n");
-            exit(1);
+            exit (1);
         }
     }
     else
     {
         if (pixels[counter] == NULL)
         {
-            printf("Erro! Memória Insuficiente.\n");
-            exit(1);
+            printf ("Erro! Memória Insuficiente.\n");
+            exit (1);
         }
     }
 }
@@ -131,7 +131,7 @@ void checar_resolucao (imagem *ptr_desenho)
 }
 
 // Recebe um valor de qualidade e encerra o programa em caso de invalidez.
-void checar_qualidade(int qualidade)
+void checar_qualidade (int qualidade)
 {
     if (qualidade != 255)
     {
@@ -143,7 +143,7 @@ void checar_qualidade(int qualidade)
 // Recebe uma cor e encerra o programa caso ela seja inválida.
 void checar_cor (int red, int green, int blue, char *comando)
 {
-    if ( red > 255 || red < 0
+    if (red > 255 || red < 0
         || green > 255 || green < 0
         || blue > 255 || blue < 0)
     {
@@ -201,8 +201,8 @@ void checar_pontos (poligonal **ptr_poligono)
 {
     if ((*ptr_poligono)->pontos < 3)
     {
-        printf("Quantidade de pontos inválida.\n");
-        exit(1);
+        printf ("Quantidade de pontos inválida.\n");
+        exit (1);
     }
 }
 

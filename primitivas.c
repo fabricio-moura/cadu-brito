@@ -175,7 +175,7 @@ void compress (FILE *arquivo_input)
 
 // Lê a compressão realizada pela função compress e gera uma imagem
 // reconhecível pelo formato.
-void decompress(FILE *arquivo_input)
+void decompress (FILE *arquivo_input)
 {
     FILE *comprimido, *descomprimido;
     int X, Y;
@@ -200,13 +200,14 @@ void decompress(FILE *arquivo_input)
     checar_formato (formato);
     checar_qualidade (qualidade);
 
-    fprintf(descomprimido, "P3\n%d %d\n255\n", Y, X);
+    fprintf (descomprimido, "P3\n%d %d\n255\n", Y, X);
 
-    while(fscanf(comprimido, ", %d %d %d %d", &counter, &red, &green, &blue) != EOF)
+    while (fscanf (comprimido, ", %d %d %d %d",
+            &counter, &red, &green, &blue) != EOF)
     {
-        for(int i = 0; i < counter; i++)
+        for (int i = 0; i < counter; i++)
         {
-            fprintf(descomprimido, "%d %d %d\n", red, green, blue);
+            fprintf (descomprimido, "%d %d %d\n", red, green, blue);
         }
     }
 

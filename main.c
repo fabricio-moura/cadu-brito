@@ -4,7 +4,7 @@
 #include "checagens.h"
 #include "tipos.h"
 
-int main()
+int main ()
 {
     pixel **pixels;
     pixel ***ptr_pixels;
@@ -18,7 +18,7 @@ int main()
     poligonal **ptr_poligono;
 
     pixels = (pixel**) malloc (1 * sizeof (pixel*));
-    checar_mempixel(pixels, -1);
+    checar_mempixel (pixels, -1);
     pixels[0] = (pixel*) malloc (1 * sizeof (pixel));
     checar_mempixel (pixels, 0);
 
