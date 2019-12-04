@@ -1,4 +1,5 @@
 ## Projeto para 3ª Unidade ITP 2019.2 UFRN
+#### https://github.com/fabricio-moura/cadu-brito
 
 Esse projeto é um trabalho realizado para compor a nota da referida unidade para a matéria de Introdução às Técnicas de Programação (Turma 07) da Universidade Federal do Rio Grande do Norte. O foco da disciplina é a linguagem C, e será desenvolvido um software que realiza a digitalização de uma imagem gráfica no formato PPM a partir de um arquivo com as primitivas (comandos) desejadas pelo usuário, resultando em um arquivo no formato P3 (.ppm) com qualidade (valor máximo para RGB) de 255.
 
