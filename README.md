@@ -23,10 +23,15 @@ O que foi feito e as funções responsáveis (presentes em primitivas.c):
   * line_y
   > Pinta o pixel na coordenada recebida no parâmetro e, se o x ou o y forem diferentes do valor final, ele verifica se algum dos dois é igual, nesse caso chamando a função line_straight, se não, ele analisa a variável de decisão e a incrementa baseada em alguns cálculos, realizando uma recursão e se invocando e, dependendo da decisão tomada e da relação entre o x e o y final e inicial, ele incrementa e/ou decrementa o x e/ou y. A diferença em relação ao line_x é que quando ele só altera um dos eixos, ele só altera o y.
 * Desenho de polígonos;
+  * rect
+  > Recebe um ponto inicial, uma largura e uma altura e verifica se o retângulo cabe sendo traçado na ordem de sentido sudeste, nordeste, noroeste, sudoeste. Para isso, ele verifica se a coordenada + medida é menor que o desenho, se for, cabe nesse sentido, se não, ele verifica se cordenada + medida é > desenho e coordenada - medida >= 0 (para não sair do desenho ao traçar para o outro lado). Assim que ele verifica que consegue traçar em algum dos quatro sentidos na ordem, ele chama a função line_straight quatro vezes.
   * polygon
+  > Lê no arquivo a quantidade de pontos que o usuário inseriu e realoca o vetor poligono com essa quantidade + 1. Então ele insere no vetor a partir do indície 1 os pontos que está no arquivo input e, quando o loop percebe que chegou no último ponto, ele copia ele último ponto para o indície zero. Assim, quando o polígono for traçado, ele irá ser fechado. Em seguida, o polígono será desenhado a partir dos pontos do vetor de trás para frente com um for iniciando pela quantidade de pontos do polígono. Então é invocada a função line utilizando o indície atual do for e o indície anterior e, em seguida, o vetor é realocado para o valor do indície. 
 * Desenho de circúlos;
   * circle
+  > Recebe do arquivo input um ponto do desenho e um raio e chama uma subfunção (circle_line) que irá desenhar o circulo, enviando para ela alguns parâmetros de decisão que serão utilizados para o cálculo do próximo pixel a ser pintado pela função.
   * circle_line
+  > O circle_line recebeu como parâmetro o valor 0 para a variável x e o valor do raio para a variável y, além da variável de decisão. Assim, enquanto o x for menor ou igual ao y, ele vai pintar um pixel em cada um dos oito octantes e vai verificar o parâmetro de decisão. Esse parâmetro será incrementado a partir de determinado cálculo dependendo do seu valor atual, e o y poderá ser decrementado, mas o x sempre será incrementado. Por fim a função utiliza recursão e se invoca, ou seja, dessa forma ela vai parar quando desenhar todo o perímetro de um octante, que é quando o valor do x e do y vão se encontrar e, como ela está pintando oito pixels por vez, ela já vai ter pintado o círculo todo.
 * Cores no geral;
   * color
   > Lê do arquivo três valores correspondentes ao RGB e insere na variável global pincel para serem utilizados como cor pelas próximas funções.
