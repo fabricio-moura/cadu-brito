@@ -90,6 +90,20 @@ O que foi feito e as funções responsáveis (presentes em primitivas.c):
   * decompress
   > Lê o nome do arquivo comprimido, transforma esse nome de .txt para .ppm e abre um arquivo descomprimido com esse nome no modo escrita. Então lê a resolução e checa a qualidade e formato e os imprime de maneira reconhecível no arquivo descomprimido. Então, em cada conjunto de cor que o laço de repetição encontrar, ele imprime no descomprimido uma linha da cor na quantidade de vezes do contador que a precede até chegar no fim do arquivo comprimido.
   
+##### Relações das subfunções de desenho
+| Função            | Subfunções                                    |
+|-------------------|-----------------------------------------------|
+| fill              | fill_spread_left, fill_spread_right           |
+| line              | line_straight, line_y, line_x                 |
+| rect              | line_straight                                 |
+| polygon           |  line                                         |
+| circle            |  circle_line                                  |
+| fill_spread_right | paint_pixels, color_picker                    |
+| fill_spread_left  | paint_pixels, color_picker, fill_spread_right |
+| line_straight     | paint_pixels                                  |
+| line_y, line_x    | paint_pixels, line_straight                   |
+| circle_line       | paint_pixels                                  |  
+
 O que não foi feito:
 * Interface gráfica (o design foi iniciado e o funcionamento isolado, mas não teve tempo de aplicar no programa)
 
