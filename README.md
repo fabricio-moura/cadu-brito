@@ -31,6 +31,8 @@ polygon 3 100 360 65 420 135 420 (desenha um triângulo)
 save desenho.ppm (salva o desenho com o nome "desenho.ppm")  
 compress desenho.ppm (comprime a imagem para o arquivo "desenho.txt")  
 
+###### OBS: Exemplo anterior presente na pasta inputs.  
+
 >open desenho.ppm (abre a imagem feita no exemplo anterior para ser editada)  
 clear 0 0 255 (pinta tudo de azul)  
 save desenho.ppm (salva a imagem)  
