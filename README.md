@@ -17,7 +17,23 @@ ___
 | fill       | fill **_coordenada_largura coordenada_altura_**                            | `fill 1300 100`                           |
 | rect       | rect **_coordenada_largura coordenada_altura largura altura_**             | `rect 1020 300 30 20`                     |
 | polygon    | polygon **_numero_pontos coordenada_largura_p1 coordenada_altura_p1 ..._** | `polygon 4 30 400 500 20 300 250 100 100` |
-| circle     | circle **_coordenada_largura coordenada_altura raio_**                     | `circle 250 200 50`                       |
+| circle     | circle **_coordenada_largura coordenada_altura raio_**                     | `circle 250 200 50`  |
+##### Exemplos de arquivo input
+> image 500 500 (cria uma imagem com resolução 500x500)  
+clear 255 255 255 (pinta tudo de branco)  
+color 0 0 0 (define a cor do píncel de preto)¹  
+circle 250 250 50 (desenha um círculo no centro do desenho com raio 50)  
+color 255 0 0 (define a cor do píncel de vermelho)  
+fill 250 250 (usa o fill a partir do centro do desenho, só pintando o circulo desenhado)  
+color 0 0 0 ¹  
+rect 0 0 40 40 (desenha um quadrado a partir do primeiro pixel, com lado 40)  
+polygon 3 100 360 65 420 135 420 (desenha um triângulo)  
+save desenho.ppm (salva o desenho com o nome "desenho.ppm")  
+compress desenho.ppm (comprime a imagem para o arquivo "desenho.txt")  
+
+>open desenho.ppm (abre a imagem feita no exemplo anterior para ser editada)  
+clear 0 0 255 (pinta tudo de azul)  
+save desenho.ppm (salva a imagem)  
 ___
 O que foi feito e as funções responsáveis (presentes em primitivas.c):
 * Criação dos tipos de dados necessários (typedef, structs e enums);
