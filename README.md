@@ -2,7 +2,23 @@
 #### https://github.com/fabricio-moura/cadu-brito
 
 Esse projeto é um trabalho realizado para compor a nota da referida unidade para a matéria de Introdução às Técnicas de Programação (Turma 07) da Universidade Federal do Rio Grande do Norte. O foco da disciplina é a linguagem C, e será desenvolvido um software que realiza a digitalização de uma imagem gráfica no formato PPM a partir de um arquivo com as primitivas (comandos) desejadas pelo usuário, resultando em um arquivo no formato P3 (.ppm) com qualidade (valor máximo para RGB) de 255.
+___
+### Lista de comandos
 
+|  Comando   | Input                                                                      | Exemplo                                   |
+|------------|----------------------------------------------------------------------------|-------------------------------------------|
+| image      |  image **_largura altura_**                                                | `image 1920 1080`                         |
+| open       | open **_nome_imagem_**                                                     | `open imagem.ppm`                         |
+| save       | save **_nome_imagem_**                                                     | `save imagem.ppm`                         |
+| compress   | compress **_nome_imagem_**                                                 | `compress imagem.ppm`                     |
+| decompress | decompress **_nome_imagem_comprimida_**                                    | `decompress imagem.txt`                   |
+| color      | color **_red green blue_**                                                 | `color 255 0 0`                           |
+| clear      | clear **_red green blue_**                                                 | `clear 255 255 255`                       |
+| fill       | fill **_coordenada_largura coordenada_altura_**                            | `fill 1300 100`                           |
+| rect       | rect **_coordenada_largura coordenada_altura largura altura_**             | `rect 1020 300 30 20`                     |
+| polygon    | polygon **_numero_pontos coordenada_largura_p1 coordenada_altura_p1 ..._** | `polygon 4 30 400 500 20 300 250 100 100` |
+| circle     | circle **_coordenada_largura coordenada_altura raio_**                     | `circle 250 200 50`                       |
+___
 O que foi feito e as funções responsáveis (presentes em primitivas.c):
 * Criação dos tipos de dados necessários (typedef, structs e enums);
 * Modularização do programa;
